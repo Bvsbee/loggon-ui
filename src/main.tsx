@@ -5,14 +5,16 @@ import App from "./App.tsx";
 import { BrowserRouter, Route, Routes } from "react-router";
 import Login from "./screens/Login.tsx";
 import Test from "./screens/Test.tsx";
+import Signup from "./screens/Signup.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}></Route>
-        <Route path="/login" element={<Login />}></Route>
+        <Route path="/Login" element={<Login />}></Route>
         <Route path="/test" element={<Test />}></Route>
+        <Route path="/Signup" element={<Signup />}></Route>
       </Routes>
     </BrowserRouter>
   </StrictMode>
