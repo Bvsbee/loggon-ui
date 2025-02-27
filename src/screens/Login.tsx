@@ -34,7 +34,7 @@ const Login = () => {
           }
           submitter={{
             searchConfig: {
-              submitText: 'Sign in',// default login was in chineses from antD
+              submitText: 'Sign in',
             },
           }}
         >
@@ -67,38 +67,8 @@ const Login = () => {
                 fieldProps={{
                   size: 'large',
                   prefix: <LockOutlined className={'prefixIcon'} />,
-                  strengthText:
-                    'Password should contain numbers, letters and special characters, at least 8 characters long.',
-                  statusRender: (value) => {
-                    const getStatus = () => {
-                      if (value && value.length > 12) {
-                        return 'ok';
-                      }
-                      if (value && value.length > 6) {
-                        return 'pass';
-                      }
-                      return 'poor';
-                    };
-                    const status = getStatus();
-                    if (status === 'pass') {
-                      return (
-                        <div style={{ color: token.colorWarning }}>
-                          sStrength: Medium
-                        </div>
-                      );
-                    }
-                    if (status === 'ok') {
-                      return (
-                        <div style={{ color: token.colorSuccess }}>
-                          Strength: Strong
-                        </div>
-                      );
-                    }
-                    return (
-                      <div style={{ color: token.colorError }}>Strength: Weak</div>
-                    );
-                  },
-                }}
+                }}  
+
                 placeholder={'password'}
                 rules={[
                   {
@@ -116,14 +86,14 @@ const Login = () => {
             }}
           >
             <ProFormCheckbox noStyle name="autoLogin">
-            remember me breh
+            Remember Me
             </ProFormCheckbox>
             <a
               style={{
                 float: 'right',
               }}
             >
-              forgot my shit again!!
+              Forgot my password
             </a>
           </div>
         </LoginForm>
