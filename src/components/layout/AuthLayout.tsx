@@ -1,13 +1,11 @@
 import { Outlet } from "react-router";
 import styles from "../../styles/AuthLayout.module.css";
-import { Footer } from "antd/es/layout/layout";
+import { Footer, Header } from "antd/es/layout/layout";
 
 const AuthLayout = () => {
   return (
     <div className={styles.container}>
-      <div className={styles.headerContent}>
-        <header className={styles.header}>Loggon</header>
-      </div>
+      <Header className={styles.header}>Loggon</Header>
 
       <main className={styles.main}>
         <Outlet />

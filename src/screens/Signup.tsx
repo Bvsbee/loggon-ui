@@ -1,14 +1,11 @@
-import {
-  LockOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import {
   LoginForm,
   ProConfigProvider,
   ProFormText,
-} from '@ant-design/pro-components';
-import { Space, theme } from 'antd';
-import { Link } from 'react-router';
+} from "@ant-design/pro-components";
+import { Space, theme } from "antd";
+import { Link } from "react-router";
 
 const Signup = () => {
   const { token } = theme.useToken();
@@ -17,12 +14,12 @@ const Signup = () => {
     <ProConfigProvider hashed={false}>
       <div style={{ backgroundColor: token.colorBgContainer }}>
         <LoginForm
-          logo="/logo.png"
-          title="LOGGON"
+          //logo="/logo.png"
+          //title="LOGGON"
           subTitle="Create an account"
           submitter={{
             searchConfig: {
-              submitText: 'Sign up',
+              submitText: "Sign up",
             },
           }}
           actions={
@@ -35,75 +32,75 @@ const Signup = () => {
           <ProFormText
             name="firstName"
             fieldProps={{
-              size: 'large',
-              prefix: <UserOutlined className={'prefixIcon'} />,
+              size: "large",
+              prefix: <UserOutlined className={"prefixIcon"} />,
             }}
-            placeholder={'First Name'}
+            placeholder={"First Name"}
             rules={[
               {
                 required: true,
-                message: 'Please enter your first name!',
+                message: "Please enter your first name!",
               },
             ]}
           />
           <ProFormText
             name="lastName"
             fieldProps={{
-              size: 'large',
-              prefix: <UserOutlined className={'prefixIcon'} />,
+              size: "large",
+              prefix: <UserOutlined className={"prefixIcon"} />,
             }}
-            placeholder={'Last Name'}
+            placeholder={"Last Name"}
             rules={[
               {
                 required: true,
-                message: 'Please enter your last name!',
+                message: "Please enter your last name!",
               },
             ]}
           />
           <ProFormText
             name="email"
             fieldProps={{
-              size: 'large',
-              prefix: <UserOutlined className={'prefixIcon'} />,
+              size: "large",
+              prefix: <UserOutlined className={"prefixIcon"} />,
             }}
-            placeholder={'Email'}
+            placeholder={"Email"}
             rules={[
               {
                 required: true,
-                message: 'Please enter your email!',
+                message: "Please enter your email!",
               },
               {
-                type: 'email',
-                message: 'Please enter a valid email address!',
+                type: "email",
+                message: "Please enter a valid email address!",
               },
             ]}
           />
           <ProFormText.Password
             name="password"
             fieldProps={{
-              size: 'large',
-              prefix: <LockOutlined className={'prefixIcon'} />,
+              size: "large",
+              prefix: <LockOutlined className={"prefixIcon"} />,
               strengthText:
-                'Password should contain numbers, letters and special characters, at least 8 characters long.',
+                "Password should contain numbers, letters and special characters, at least 8 characters long.",
               statusRender: (value) => {
                 const getStatus = () => {
                   if (value && value.length > 12) {
-                    return 'ok';
+                    return "ok";
                   }
                   if (value && value.length > 6) {
-                    return 'pass';
+                    return "pass";
                   }
-                  return 'poor';
+                  return "poor";
                 };
                 const status = getStatus();
-                if (status === 'pass') {
+                if (status === "pass") {
                   return (
                     <div style={{ color: token.colorWarning }}>
                       Strength: Medium
                     </div>
                   );
                 }
-                if (status === 'ok') {
+                if (status === "ok") {
                   return (
                     <div style={{ color: token.colorSuccess }}>
                       Strength: Strong
@@ -115,32 +112,32 @@ const Signup = () => {
                 );
               },
             }}
-            placeholder={'Password'}
+            placeholder={"Password"}
             rules={[
               {
                 required: true,
-                message: 'Please enter your password!',
+                message: "Please enter your password!",
               },
             ]}
           />
           <ProFormText.Password
             name="confirmPassword"
             fieldProps={{
-              size: 'large',
-              prefix: <LockOutlined className={'prefixIcon'} />,
+              size: "large",
+              prefix: <LockOutlined className={"prefixIcon"} />,
             }}
-            placeholder={'Confirm Password'}
+            placeholder={"Confirm Password"}
             rules={[
               {
                 required: true,
-                message: 'Please confirm your password!',
+                message: "Please confirm your password!",
               },
               ({ getFieldValue }) => ({
                 validator(_, value) {
-                  if (!value || getFieldValue('password') === value) {
+                  if (!value || getFieldValue("password") === value) {
                     return Promise.resolve();
                   }
-                  return Promise.reject(new Error('Passwords do not match!'));
+                  return Promise.reject(new Error("Passwords do not match!"));
                 },
               }),
             ]}
