@@ -1,0 +1,39 @@
+* {
+  margin: 0;
+  padding:0;
+}
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.headerContent {
+  max-width: 1200px;
+  margin: 0;
+  top: 0;
+  display: flex;
+  position: sticky;
+  justify-content: center;
+  align-items: center;
+  height: 64px;
+}
+
+.header {
+  background-color: #333333;
+  color: #e8d8c4;
+}
+
+.tile {
+}
+
+.footer {
+  background-color: #5a3e2b;
+}
