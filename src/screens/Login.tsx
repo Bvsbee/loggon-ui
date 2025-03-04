@@ -1,13 +1,16 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Card, Col, Form, Layout } from "antd";
+import { Card, Col, Form, Layout, Tag } from "antd";
 import { Link, useNavigate } from "react-router";
 import { LoginForm, ProFormText } from "@ant-design/pro-components";
 import { registerUser } from "../api/authAPI";
+import { useState } from "react";
 const Login = () => {
   const { Content } = Layout;
 
   const [form] = Form.useForm();
   const nav = useNavigate();
+
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   const onFinish = async (values: { email: string; password: string }) => {
     try {
@@ -16,8 +19,12 @@ const Login = () => {
       if (response.token && response.userId) {
         nav("/");
       }
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (error: any) {
+      if (error?.response?.data?.message) {
+        setLoginError(error?.response.data?.message);
+      } else {
+        setLoginError("An unknown error occurred, please try again later."); // Fallback error message
+      }
     }
   };
 
@@ -65,6 +72,7 @@ const Login = () => {
             placeholder="Password"
           />
         </LoginForm>
+        <div>{loginError && <Tag color="red">{loginError}</Tag>}</div>
         <Col>
           <div>
             <text>Don't Have An Account? </text>
