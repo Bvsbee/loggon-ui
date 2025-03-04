@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Avatar, Dropdown, Menu, Input } from "antd";
+import { Layout, Avatar, Dropdown, Menu, Input, Button } from "antd";
 import { UserOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 
 const { Header, Content, Footer } = Layout;
@@ -28,23 +28,26 @@ const AppLayout: React.FC = () => {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "space-between",
-          background: "#606c38",
           padding: "0 50px",
           height: "140px",
           width: "100%",
         }}
       >
-
-        <div style={{display: "flex", alignItems: "center", width: "100%"}}>
-
-        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "left" }}>
-            <img 
-              src="/logo.png" 
-              alt="Logo" 
+        <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "left",
+            }}
+          >
+            <img
+              src="/logo.png"
+              alt="Logo"
               style={{ height: "125px", marginTop: "-10px" }}
             />
-        </div>
-
+          </div>
 
           <div style={{ flex: 2, display: "flex", justifyContent: "center" }}>
             <Search
@@ -55,20 +58,32 @@ const AppLayout: React.FC = () => {
                 width: "60%",
                 minWidth: "400px",
                 maxWidth: "800px",
-                background: "transparent",
+
                 border: "2px solid rgba(255, 255, 255, 0.5)",
                 borderRadius: "8px",
-                color: "white",
               }}
               className="custom-search"
             />
           </div>
 
-          <div style={{ flex: 1, display: "flex", justifyContent: "flex-end", gap: "20px" }}>
-            <ShoppingCartOutlined style={{ fontSize: "24px", color: "white", cursor: "pointer" }} />
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              justifyContent: "flex-end",
+              gap: "20px",
+            }}
+          >
+            <ShoppingCartOutlined
+              style={{ fontSize: "24px", cursor: "pointer" }}
+            />
 
             <Dropdown overlay={userMenu} placement="bottomRight">
-              <Avatar size="large" icon={<UserOutlined />} style={{ cursor: "pointer" }} />
+              <Avatar
+                size="large"
+                icon={<UserOutlined />}
+                style={{ cursor: "pointer" }}
+              />
             </Dropdown>
           </div>
         </div>
@@ -91,7 +106,6 @@ const AppLayout: React.FC = () => {
             <Menu.Item key="about">ABOUT</Menu.Item>
             <Menu.Item key="contact">CONTACT</Menu.Item>
           </Menu>
-        
         </div>
       </Header>
 
@@ -100,20 +114,18 @@ const AppLayout: React.FC = () => {
           flexGrow: 1,
           width: "100%",
           padding: "20px",
-          background: "#fefae0",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
+        <Button>Hello</Button>
         <h1>blah blah blah</h1>
       </Content>
 
       <Footer
         style={{
           textAlign: "center",
-          background: "#000000",
-          color: "white",
           padding: "50px",
         }}
       >

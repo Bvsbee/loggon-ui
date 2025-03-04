@@ -2,10 +2,11 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: #d9c5a9;
 }
 
 .header {
-  background-color: #333333;
+  /* background-color: #28231f; */
   padding: 0 20px;
   position: fixed;
   top: 0;
@@ -19,6 +20,20 @@
   font-weight: bold;
 }
 
+.footer {
+  /* background-color: #28231f; */
+  padding: 0 20px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  margin: 0;
+  font-size: 1.5rem;
+  padding: 0.2rem;
+  font-weight: bold;
+}
+
 .main {
   margin-top: calc(64px + 72px); /* Header height + Nav height */
   padding: 2rem 20px;
@@ -27,8 +42,4 @@
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-}
-
-.footer {
-  background-color: #5a3e2b;
 }

@@ -1,20 +1,22 @@
 import { Outlet } from "react-router";
 import styles from "../../styles/AuthLayout.module.css";
-import { Footer, Header } from "antd/es/layout/layout";
+import { Flex, Layout } from "antd";
 
 const AuthLayout = () => {
-  return (
-    <div className={styles.container}>
-      <Header className={styles.header}>Loggon</Header>
+  const { Header, Footer, Content } = Layout;
 
-      <main className={styles.main}>
+  return (
+    <Layout>
+      <Header className={styles.header}>LoggOn</Header>
+
+      <Content>
         <Outlet />
-      </main>
+      </Content>
 
       <Footer className={styles.footer}>
-        © 2025 Loggon. All rights reserved
+        © {new Date().getFullYear()} LoggOn. All rights reserved.
       </Footer>
-    </div>
+    </Layout>
   );
 };
 

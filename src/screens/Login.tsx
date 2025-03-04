@@ -1,98 +1,74 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import {
-  LoginForm,
-  ProConfigProvider,
-  ProFormCheckbox,
-  ProFormText,
-} from "@ant-design/pro-components";
-import { Space, Tabs, theme } from "antd";
-import { useState } from "react";
+import { Button, Card, Col, Form, Input, Row, Space, Layout } from "antd";
 import { Link } from "react-router";
-
-type LoginType = "account";
+import axios from "axios";
 
 const Login = () => {
-  const { token } = theme.useToken();
-  const [loginType, setLoginType] = useState<LoginType>("account");
+  const { Content } = Layout;
+
+  const [form] = Form.useForm();
+
+  const fields = ["email", "password"];
+
+  const onFinish = async (values: { email: string; password: string }) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/auth/login",
+        values
+      );
+      message.success("User registered successfully!");
+      console.log("Response:", response.data);
+    } catch (error) {
+      message.error("Registration failed. Please try again.");
+      console.error("Error:", error);
+    }
+  };
 
   return (
-    <ProConfigProvider hashed={false}>
-      <div style={{ backgroundColor: token.colorBgContainer }}>
-        <LoginForm
-          //logo="/logo.png"
-          //title="LOGGON"
-          //subTitle="login"
-          actions={
-            <Space>
-              New here?
-              <Link to="/Signup">Register</Link>
-            </Space>
-          }
-          submitter={{
-            searchConfig: {
-              submitText: "Sign in",
-            },
-          }}
-        >
-          <Tabs
-            centered
-            activeKey={loginType}
-            onChange={(activeKey) => setLoginType(activeKey as LoginType)}
-          >
-            <Tabs.TabPane key={"account"} tab={"Sign in"} />
-          </Tabs>
-          {loginType === "account" && (
-            <>
-              <ProFormText
-                name="email"
-                fieldProps={{
-                  size: "large",
-                  prefix: <UserOutlined className={"prefixIcon"} />,
-                }}
-                placeholder={"email: admin or user"}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter your email!",
-                  },
-                ]}
-              />
-              <ProFormText.Password
-                name="password"
-                fieldProps={{
-                  size: "large",
-                  prefix: <LockOutlined className={"prefixIcon"} />,
-                }}
-                placeholder={"password"}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter your password!",
-                  },
-                ]}
-              />
-            </>
-          )}
+    <Content>
+      <Card>
+        <Form onFinish={onFinish} form={form}>
+          <Row>
+            <Space direction="vertical" style={{ display: "flex" }}>
+              <Col>
+                <Form.Item name="email">
+                  <Input prefix={<UserOutlined />} placeholder="Email" />
+                </Form.Item>
+              </Col>
+              <Col>
+                <Form.Item
+                  name="password"
+                  rules={[
+                    { required: true, message: "Please enter your password" },
+                    {
+                      message:
+                        "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.",
+                    },
+                  ]}
+                >
+                  <Input.Password
+                    style={{ borderRadius: 1 }}
+                    prefix={<LockOutlined />}
+                    placeholder="Password"
+                  />
+                </Form.Item>
+              </Col>
 
-          <div
-            style={{
-              marginBlockEnd: 24,
-            }}
-          >
-            <ProFormCheckbox noStyle name="autoLogin">
-              Remember Me
-            </ProFormCheckbox>
-            <a
-              style={{
-                float: "right",
-              }}
-            >
-              Forgot my password
-            </a>
-          </div>
-        </LoginForm>
-      </div>
-    </ProConfigProvider>
+              <Col>
+                <div>
+                  <text>Don't Have An Account? </text>
+                </div>
+              </Col>
+
+              <Link to="/signup">Sign up now!</Link>
+              <Button type="primary" onClick={form.submit}>
+                Login
+              </Button>
+            </Space>
+          </Row>
+        </Form>
+      </Card>
+    </Content>
   );
 };
 export default Login;

@@ -1,16 +1,16 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import Login from "./screens/Login.tsx";
 import Signup from "./screens/Signup.tsx";
-import Layout from "./components/layout/MainLayout.tsx";
 import AuthLayout from "./components/layout/AuthLayout.tsx";
 import "./App.css";
 import Home from "./screens/Home.tsx";
+import AppLayout from "./components/layout/Layout.tsx";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<Layout />}>
+        <Route element={<AppLayout />}>
           <Route path="/" element={<Home />}></Route>
         </Route>
 
