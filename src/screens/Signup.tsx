@@ -4,6 +4,7 @@ import {
   ProConfigProvider,
   ProFormText,
 } from "@ant-design/pro-components";
+import { useMutation } from "@tanstack/react-query";
 import { Space, theme } from "antd";
 import { Link } from "react-router";
 
@@ -16,7 +17,7 @@ const Signup = () => {
         <LoginForm
           //logo="/logo.png"
           //title="LOGGON"
-          subTitle="Create an account"
+          title="Create an account"
           submitter={{
             searchConfig: {
               submitText: "Sign up",
@@ -28,6 +29,7 @@ const Signup = () => {
               <Link to="/login">Sign in</Link>
             </Space>
           }
+          style={{ padding: 20 }}
         >
           <ProFormText
             name="firstName"

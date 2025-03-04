@@ -1,25 +1,22 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Form, Input, Row, Space, Layout } from "antd";
-import { Link } from "react-router";
-import axios from "axios";
-
+import { Card, Col, Form, Layout } from "antd";
+import { Link, useNavigate } from "react-router";
+import { LoginForm, ProFormText } from "@ant-design/pro-components";
+import { registerUser } from "../api/authAPI";
 const Login = () => {
   const { Content } = Layout;
 
   const [form] = Form.useForm();
-
-  const fields = ["email", "password"];
+  const nav = useNavigate();
 
   const onFinish = async (values: { email: string; password: string }) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/auth/login",
-        values
-      );
-      message.success("User registered successfully!");
-      console.log("Response:", response.data);
+      const response = await registerUser(values);
+
+      if (response.token && response.userId) {
+        nav("/");
+      }
     } catch (error) {
-      message.error("Registration failed. Please try again.");
       console.error("Error:", error);
     }
   };
@@ -27,46 +24,53 @@ const Login = () => {
   return (
     <Content>
       <Card>
-        <Form onFinish={onFinish} form={form}>
-          <Row>
-            <Space direction="vertical" style={{ display: "flex" }}>
-              <Col>
-                <Form.Item name="email">
-                  <Input prefix={<UserOutlined />} placeholder="Email" />
-                </Form.Item>
-              </Col>
-              <Col>
-                <Form.Item
-                  name="password"
-                  rules={[
-                    { required: true, message: "Please enter your password" },
-                    {
-                      message:
-                        "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.",
-                    },
-                  ]}
-                >
-                  <Input.Password
-                    style={{ borderRadius: 1 }}
-                    prefix={<LockOutlined />}
-                    placeholder="Password"
-                  />
-                </Form.Item>
-              </Col>
+        <LoginForm
+          title="Login"
+          onFinish={onFinish}
+          form={form}
+          submitter={{
+            searchConfig: {
+              submitText: "Login",
+            },
+          }}
+          style={{ padding: 20 }}
+        >
+          <ProFormText
+            name="email"
+            fieldProps={{
+              size: "large",
+              prefix: <UserOutlined className={"prefixIcon"} />,
+            }}
+            placeholder="Email"
+            rules={[
+              {
+                required: true,
+                message: "Please enter your Email Address",
+              },
+            ]}
+          />
 
-              <Col>
-                <div>
-                  <text>Don't Have An Account? </text>
-                </div>
-              </Col>
-
-              <Link to="/signup">Sign up now!</Link>
-              <Button type="primary" onClick={form.submit}>
-                Login
-              </Button>
-            </Space>
-          </Row>
-        </Form>
+          <ProFormText.Password
+            name="password"
+            fieldProps={{
+              size: "large",
+              prefix: <LockOutlined className={"prefixIcon"} />,
+            }}
+            rules={[
+              {
+                required: true,
+                message: "Please enter your password",
+              },
+            ]}
+            placeholder="Password"
+          />
+        </LoginForm>
+        <Col>
+          <div>
+            <text>Don't Have An Account? </text>
+            <Link to="/signup">Sign up now!</Link>
+          </div>
+        </Col>
       </Card>
     </Content>
   );
