@@ -1,34 +1,58 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import {
-  LoginForm,
-  ProConfigProvider,
-  ProFormText,
-} from "@ant-design/pro-components";
-import { useMutation } from "@tanstack/react-query";
-import { Space, theme } from "antd";
-import { Link } from "react-router";
+import { Card, Col, Form, Layout, Tag, message } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { LoginForm, ProFormText } from "@ant-design/pro-components";
+import { useState } from "react";
+import loggonAPI from "../api/api";
 
 const Signup = () => {
-  const { token } = theme.useToken();
+  const { Content } = Layout;
+  const [form] = Form.useForm();
+  const nav = useNavigate();
+  const [signupError, setSignupError] = useState<string | null>(null);
+
+  const onFinish = async (values: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  }) => {
+    try {
+      const response = await loggonAPI.post("/user/create", {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        password: values.password
+      });
+      
+      if (response.data?.userId && response.data?.token) {
+        message.success("Account created successfully!");
+        nav("/login");
+      }
+    } catch (error: any) {
+      console.error('Signup error:', error);
+      if (error?.response?.data?.message) {
+        setSignupError(error.response.data.message);
+      } else if (error?.message) {
+        setSignupError(error.message);
+      } else {
+        setSignupError("An unknown error occurred, please try again later.");
+      }
+    }
+  };
 
   return (
-    <ProConfigProvider hashed={false}>
-      <div style={{ backgroundColor: token.colorBgContainer }}>
+    <Content>
+      <Card>
         <LoginForm
-          //logo="/logo.png"
-          //title="LOGGON"
           title="Create an account"
+          onFinish={onFinish}
+          form={form}
           submitter={{
             searchConfig: {
               submitText: "Sign up",
             },
           }}
-          actions={
-            <Space>
-              Already have an account?
-              <Link to="/login">Sign in</Link>
-            </Space>
-          }
           style={{ padding: 20 }}
         >
           <ProFormText
@@ -37,11 +61,11 @@ const Signup = () => {
               size: "large",
               prefix: <UserOutlined className={"prefixIcon"} />,
             }}
-            placeholder={"First Name"}
+            placeholder="First Name"
             rules={[
               {
                 required: true,
-                message: "Please enter your first name!",
+                message: "Please enter your first name",
               },
             ]}
           />
@@ -51,11 +75,11 @@ const Signup = () => {
               size: "large",
               prefix: <UserOutlined className={"prefixIcon"} />,
             }}
-            placeholder={"Last Name"}
+            placeholder="Last Name"
             rules={[
               {
                 required: true,
-                message: "Please enter your last name!",
+                message: "Please enter your last name",
               },
             ]}
           />
@@ -65,15 +89,15 @@ const Signup = () => {
               size: "large",
               prefix: <UserOutlined className={"prefixIcon"} />,
             }}
-            placeholder={"Email"}
+            placeholder="Email"
             rules={[
               {
                 required: true,
-                message: "Please enter your email!",
+                message: "Please enter your email",
               },
               {
                 type: "email",
-                message: "Please enter a valid email address!",
+                message: "Please enter a valid email address",
               },
             ]}
           />
@@ -82,43 +106,21 @@ const Signup = () => {
             fieldProps={{
               size: "large",
               prefix: <LockOutlined className={"prefixIcon"} />,
-              strengthText:
-                "Password should contain numbers, letters and special characters, at least 8 characters long.",
-              statusRender: (value) => {
-                const getStatus = () => {
-                  if (value && value.length > 12) {
-                    return "ok";
-                  }
-                  if (value && value.length > 6) {
-                    return "pass";
-                  }
-                  return "poor";
-                };
-                const status = getStatus();
-                if (status === "pass") {
-                  return (
-                    <div style={{ color: token.colorWarning }}>
-                      Strength: Medium
-                    </div>
-                  );
-                }
-                if (status === "ok") {
-                  return (
-                    <div style={{ color: token.colorSuccess }}>
-                      Strength: Strong
-                    </div>
-                  );
-                }
-                return (
-                  <div style={{ color: token.colorError }}>Strength: Weak</div>
-                );
-              },
             }}
-            placeholder={"Password"}
+            placeholder="Password"
             rules={[
               {
                 required: true,
-                message: "Please enter your password!",
+                message: "Please enter your password",
+              },
+              {
+                min: 8,
+                message: "Password must be at least 8 characters long",
+              },
+              {
+                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+                message:
+                  "Password must contain uppercase , lowercase, number and special character",
               },
             ]}
           />
@@ -128,25 +130,32 @@ const Signup = () => {
               size: "large",
               prefix: <LockOutlined className={"prefixIcon"} />,
             }}
-            placeholder={"Confirm Password"}
+            placeholder="Confirm Password"
             rules={[
               {
                 required: true,
-                message: "Please confirm your password!",
+                message: "Please confirm your password",
               },
               ({ getFieldValue }) => ({
                 validator(_, value) {
                   if (!value || getFieldValue("password") === value) {
                     return Promise.resolve();
                   }
-                  return Promise.reject(new Error("Passwords do not match!"));
+                  return Promise.reject(new Error("Passwords do not match"));
                 },
               }),
             ]}
           />
         </LoginForm>
-      </div>
-    </ProConfigProvider>
+        <div>{signupError && <Tag color="red">{signupError}</Tag>}</div>
+        <Col>
+          <div>
+            <text>Already have an account? </text>
+            <Link to="/login">Sign in</Link>
+          </div>
+        </Col>
+      </Card>
+    </Content>
   );
 };
 
