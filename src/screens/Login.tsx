@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router";
 import { LoginForm, ProFormText } from "@ant-design/pro-components";
 import { registerUser } from "../api/authAPI";
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 const Login = () => {
   const { Content } = Layout;
 
@@ -12,11 +13,15 @@ const Login = () => {
 
   const [loginError, setLoginError] = useState<string | null>(null);
 
+  const { login, user } = useAuth();
+
   const onFinish = async (values: { email: string; password: string }) => {
     try {
       const response = await registerUser(values);
 
       if (response.token && response.userId) {
+        login(values, response.token);
+        console.log(user, response.token);
         nav("/");
       }
     } catch (error: any) {
@@ -76,7 +81,9 @@ const Login = () => {
         <Col>
           <div>
             <text>Don't Have An Account? </text>
-            <Link to="/signup">Sign up now!</Link>
+            <Link style={{ color: "blue" }} to="/signup">
+              Sign up now!
+            </Link>
           </div>
         </Col>
       </Card>

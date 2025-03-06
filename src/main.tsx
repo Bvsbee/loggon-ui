@@ -6,11 +6,14 @@ import { ConfigProvider } from "antd";
 import { loggonTheme } from "./styles/loggonTheme.ts";
 
 import "./index.css";
+import AuthProvider from "./context/AuthContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ConfigProvider theme={loggonTheme}>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </ConfigProvider>
   </StrictMode>
 );

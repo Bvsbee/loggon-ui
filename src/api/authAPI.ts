@@ -8,3 +8,15 @@ export const registerUser = async (credentials: {
 
   return data;
 };
+export const getProfile = async (email: string, token: string) => {
+  const { data } = await loggonAPI.get("user/profile", {
+    headers: {
+      Authorization: `Bearer ${token}`, // Send the token here
+    },
+    params: {
+      email: email,
+    },
+  });
+
+  return data;
+};

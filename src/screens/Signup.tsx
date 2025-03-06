@@ -22,15 +22,15 @@ const Signup = () => {
         firstName: values.firstName,
         lastName: values.lastName,
         email: values.email,
-        password: values.password
+        password: values.password,
       });
-      
+
       if (response.data?.userId && response.data?.token) {
         message.success("Account created successfully!");
         nav("/login");
       }
     } catch (error: any) {
-      console.error('Signup error:', error);
+      console.error("Signup error:", error);
       if (error?.response?.data?.message) {
         setSignupError(error.response.data.message);
       } else if (error?.message) {
@@ -118,7 +118,8 @@ const Signup = () => {
                 message: "Password must be at least 8 characters long",
               },
               {
-                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+                pattern:
+                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
                 message:
                   "Password must contain uppercase , lowercase, number and special character",
               },
@@ -151,7 +152,9 @@ const Signup = () => {
         <Col>
           <div>
             <text>Already have an account? </text>
-            <Link to="/login">Sign in</Link>
+            <Link style={{ color: "blue" }} to="/login">
+              Sign in
+            </Link>
           </div>
         </Col>
       </Card>

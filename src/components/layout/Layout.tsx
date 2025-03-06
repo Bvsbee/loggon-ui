@@ -1,24 +1,43 @@
 import React from "react";
-import { Layout, Avatar, Dropdown, Menu, Input, Button } from "antd";
+import { Layout, Avatar, Dropdown, Menu, Input, Button, MenuProps } from "antd";
 import { UserOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router";
 
 const { Header, Content, Footer } = Layout;
 const { Search } = Input;
 
 const AppLayout: React.FC = () => {
-  const userMenu = (
-    <Menu
-      items={[
-        { key: "1", label: "Profile" },
-        { key: "2", label: "Settings" },
-        { key: "3", label: "Logout" },
-      ]}
-    />
-  );
+  const nav = useNavigate();
+  const { user, logout } = useAuth();
+
+  const items: MenuProps["items"] = [
+    {
+      label: <a href="/profile">Profile</a>,
+      key: "0",
+    },
+    {
+      label: <a href="/settings">Settings</a>,
+      key: "1",
+    },
+    {
+      label: <a href="/">Logout</a>,
+      key: "2",
+      onClick: () => {
+        logout();
+      },
+    },
+  ];
 
   const handleSearch = (value: string) => {
     console.log("Searching:", value);
   };
+
+  const handleClick = () => {
+    nav("/login");
+  };
+
+  console.log(user?.firstName);
 
   return (
     <Layout style={{ minHeight: "100vh", width: "100vw", overflow: "hidden" }}>
@@ -78,13 +97,17 @@ const AppLayout: React.FC = () => {
               style={{ fontSize: "24px", cursor: "pointer" }}
             />
 
-            <Dropdown overlay={userMenu} placement="bottomRight">
-              <Avatar
-                size="large"
-                icon={<UserOutlined />}
-                style={{ cursor: "pointer" }}
-              />
-            </Dropdown>
+            {user ? (
+              <Dropdown menu={{ items }} placement="bottomRight">
+                <Avatar
+                  size="large"
+                  icon={<UserOutlined />}
+                  style={{ cursor: "pointer" }}
+                />
+              </Dropdown>
+            ) : (
+              <Button onClick={handleClick}>Login</Button>
+            )}
           </div>
         </div>
 
@@ -119,8 +142,7 @@ const AppLayout: React.FC = () => {
           alignItems: "center",
         }}
       >
-        <Button>Hello</Button>
-        <h1>blah blah blah</h1>
+        <h1>Welcome {user?.firstName}</h1>
       </Content>
 
       <Footer

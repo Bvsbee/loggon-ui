@@ -1,13 +1,15 @@
 import { Outlet } from "react-router";
 import styles from "../../styles/AuthLayout.module.css";
-import { Flex, Layout } from "antd";
+import { Layout } from "antd";
 
 const AuthLayout = () => {
   const { Header, Footer, Content } = Layout;
 
   return (
     <Layout>
-      <Header className={styles.header}>LoggOn</Header>
+      <Header className={styles.header}>
+        <a href="/">LoggOn</a>
+      </Header>
 
       <Content>
         <Outlet />
