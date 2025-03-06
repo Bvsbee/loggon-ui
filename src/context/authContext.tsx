@@ -59,7 +59,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         user,
         token,
         isAuthenticated: !!user,
-        isAdmin: user?.isAdmin ?? false, // ✅ Expose isAdmin globally
+        isAdmin: user?.isAdmin ?? false, 
         login,
         logout,
       }}
