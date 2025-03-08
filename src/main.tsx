@@ -2,20 +2,18 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
-import { BrowserRouter, Route, Routes } from "react-router";
-import Login from "./screens/Login.tsx";
-import Test from "./screens/Test.tsx";
-import Signup from "./screens/Signup.tsx";
+import { ConfigProvider } from "antd";
+import { loggonTheme } from "./styles/loggonTheme.ts";
+
+import "./index.css";
+import AuthProvider from "./context/AuthContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />}></Route>
-        <Route path="/Login" element={<Login />}></Route>
-        <Route path="/test" element={<Test />}></Route>
-        <Route path="/Signup" element={<Signup />}></Route>
-      </Routes>
-    </BrowserRouter>
+    <ConfigProvider theme={loggonTheme}>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </ConfigProvider>
   </StrictMode>
 );

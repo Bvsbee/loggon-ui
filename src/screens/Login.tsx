@@ -1,134 +1,93 @@
-import {
-  LockOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
-import {
-  LoginForm,
-  ProConfigProvider,
-  ProFormCheckbox,
-  ProFormText,
-} from '@ant-design/pro-components';
-import { Space, Tabs, theme } from 'antd';
-import { useState } from 'react';
-import { Link, } from 'react-router'
-
-type LoginType = 'account';
-
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Card, Col, Form, Layout, Tag } from "antd";
+import { Link, useNavigate } from "react-router";
+import { LoginForm, ProFormText } from "@ant-design/pro-components";
+import { registerUser } from "../api/authAPI";
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 const Login = () => {
-  const { token } = theme.useToken();
-  const [loginType, setLoginType] = useState<LoginType>('account');
+  const { Content } = Layout;
 
+  const [form] = Form.useForm();
+  const nav = useNavigate();
+
+  const [loginError, setLoginError] = useState<string | null>(null);
+
+  const { login, user } = useAuth();
+
+  const onFinish = async (values: { email: string; password: string }) => {
+    try {
+      const response = await registerUser(values);
+
+      if (response.token && response.userId) {
+        login(values, response.token);
+        console.log(user, response.token);
+        nav("/");
+      }
+    } catch (error: any) {
+      if (error?.response?.data?.message) {
+        setLoginError(error?.response.data?.message);
+      } else {
+        setLoginError("An unknown error occurred, please try again later."); // Fallback error message
+      }
+    }
+  };
 
   return (
-    <ProConfigProvider hashed={false}>
-      <div style={{ backgroundColor: token.colorBgContainer }}>
+    <Content>
+      <Card>
         <LoginForm
-          logo="/logo.png"
-          //title="LOGGON"
-          //subTitle="login"
-          actions={
-            <Space>
-             New here?
-             <Link to="/Signup">Register</Link>
-            </Space>
-          }
+          title="Login"
+          onFinish={onFinish}
+          form={form}
           submitter={{
             searchConfig: {
-              submitText: 'Sign in',// default login was in chineses from antD
+              submitText: "Login",
             },
           }}
+          style={{ padding: 20 }}
         >
-          <Tabs
-            centered
-            activeKey={loginType}
-            onChange={(activeKey) => setLoginType(activeKey as LoginType)}
-          >
-            <Tabs.TabPane key={'account'} tab={'Sign in'} />
-            
-          </Tabs>
-          {loginType === 'account' && (
-            <>
-              <ProFormText
-                name="email"
-                fieldProps={{
-                  size: 'large',
-                  prefix: <UserOutlined className={'prefixIcon'} />,
-                }}
-                placeholder={'email: admin or user'}
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please enter your email!',
-                  },
-                ]}
-              />
-              <ProFormText.Password
-                name="password"
-                fieldProps={{
-                  size: 'large',
-                  prefix: <LockOutlined className={'prefixIcon'} />,
-                  strengthText:
-                    'Password should contain numbers, letters and special characters, at least 8 characters long.',
-                  statusRender: (value) => {
-                    const getStatus = () => {
-                      if (value && value.length > 12) {
-                        return 'ok';
-                      }
-                      if (value && value.length > 6) {
-                        return 'pass';
-                      }
-                      return 'poor';
-                    };
-                    const status = getStatus();
-                    if (status === 'pass') {
-                      return (
-                        <div style={{ color: token.colorWarning }}>
-                          sStrength: Medium
-                        </div>
-                      );
-                    }
-                    if (status === 'ok') {
-                      return (
-                        <div style={{ color: token.colorSuccess }}>
-                          Strength: Strong
-                        </div>
-                      );
-                    }
-                    return (
-                      <div style={{ color: token.colorError }}>Strength: Weak</div>
-                    );
-                  },
-                }}
-                placeholder={'password'}
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please enter your password!',
-                  },
-                ]}
-              />
-            </>
-          )}
-          
-          <div
-            style={{
-              marginBlockEnd: 24,
+          <ProFormText
+            name="email"
+            fieldProps={{
+              size: "large",
+              prefix: <UserOutlined className={"prefixIcon"} />,
             }}
-          >
-            <ProFormCheckbox noStyle name="autoLogin">
-            remember me breh
-            </ProFormCheckbox>
-            <a
-              style={{
-                float: 'right',
-              }}
-            >
-              forgot my shit again!!
-            </a>
-          </div>
+            placeholder="Email"
+            rules={[
+              {
+                required: true,
+                message: "Please enter your Email Address",
+              },
+            ]}
+          />
+
+          <ProFormText.Password
+            name="password"
+            fieldProps={{
+              size: "large",
+              prefix: <LockOutlined className={"prefixIcon"} />,
+            }}
+            rules={[
+              {
+                required: true,
+                message: "Please enter your password",
+              },
+            ]}
+            placeholder="Password"
+          />
         </LoginForm>
-      </div>
-    </ProConfigProvider>
+        <div>{loginError && <Tag color="red">{loginError}</Tag>}</div>
+        <Col>
+          <div>
+            <text>Don't Have An Account? </text>
+            <Link style={{ color: "blue" }} to="/signup">
+              Sign up now!
+            </Link>
+          </div>
+        </Col>
+      </Card>
+    </Content>
   );
 };
 export default Login;

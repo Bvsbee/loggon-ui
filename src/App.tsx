@@ -1,41 +1,26 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
-import { Link, } from 'react-router'
-
+import { BrowserRouter, Route, Routes } from "react-router";
+import Login from "./screens/Login.tsx";
+import Signup from "./screens/Signup.tsx";
+import AuthLayout from "./components/layout/AuthLayout.tsx";
+import "./App.css";
+import Home from "./screens/Home.tsx";
+import AppLayout from "./components/layout/Layout.tsx";
 
 function App() {
-  const [count, setCount] = useState(0)
-
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <Link to="/Login">Login Page</Link>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<AppLayout />}>
+          <Route path="/" element={<Home />}></Route>
+        </Route>
 
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+        <Route element={<AuthLayout />}>
+          <Route path="/signup" element={<Signup />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
