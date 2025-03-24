@@ -3,11 +3,16 @@ import { Layout, Avatar, Dropdown, Menu, Input, Button, MenuProps } from "antd";
 import { UserOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router";
+import { Link } from "react-router";
 
 const { Header, Content, Footer } = Layout;
 const { Search } = Input;
 
-const AppLayout: React.FC = () => {
+interface AppLayoutProps {
+  children: React.ReactNode;
+}
+
+const AppLayout: React.FC<AppLayoutProps> = ({children}) => {
   const nav = useNavigate();
   const { user, logout } = useAuth();
 
@@ -48,7 +53,7 @@ const AppLayout: React.FC = () => {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "0 50px",
-          height: "140px",
+          height: "150px",
           width: "100%",
         }}
       >
@@ -123,7 +128,9 @@ const AppLayout: React.FC = () => {
               gap: "10px",
             }}
           >
-            <Menu.Item key="home">HOME</Menu.Item>
+            <Menu.Item key="home">
+              <Link to="/home">HOME</Link>
+            </Menu.Item>
             <Menu.Item key="shop">SHOP SPECIES</Menu.Item>
             <Menu.Item key="gallery">GALLERY</Menu.Item>
             <Menu.Item key="about">ABOUT</Menu.Item>
@@ -136,13 +143,17 @@ const AppLayout: React.FC = () => {
         style={{
           flexGrow: 1,
           width: "100%",
+          maxWidth: "1200px",
           padding: "20px",
           display: "flex",
+          flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
+          margin: "0 auto",
         }}
       >
-        <h1>Welcome {user?.firstName}</h1>
+        {children}
+        
       </Content>
 
       <Footer

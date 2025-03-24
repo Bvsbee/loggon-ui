@@ -10,17 +10,20 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<AppLayout />}>
+        <Route element={<AppLayout children={undefined} />}>
           <Route path="/" element={<Home />}></Route>
         </Route>
 
         <Route element={<AuthLayout />}>
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/login" element={<Login />}></Route>
+          <Route path="/home" element={<Home />}></Route>
+
         </Route>
       </Routes>
     </BrowserRouter>
   );
 }
 
-export default App;
+export default App; 
+
