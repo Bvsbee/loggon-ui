@@ -6,6 +6,8 @@ import "./App.css";
 
 import AppLayout from "./components/layout/Layout.tsx";
 import Home from "./screens/Home.tsx";
+import AdminLayout from "./admin/layout/AdminLayout.tsx";
+import AdminDashboard from "./admin/AdminDashboard.tsx";
 
 function App() {
   return (
@@ -18,6 +20,10 @@ function App() {
         <Route element={<AuthLayout />}>
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/login" element={<Login />}></Route>
+        </Route>
+
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<AdminDashboard />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
