@@ -2,17 +2,13 @@ import React from "react";
 import { Layout, Avatar, Dropdown, Menu, Input, Button, MenuProps } from "antd";
 import { UserOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import { Link } from "react-router";
 
 const { Header, Content, Footer } = Layout;
 const { Search } = Input;
 
-interface AppLayoutProps {
-  children: React.ReactNode;
-}
-
-const AppLayout: React.FC<AppLayoutProps> = ({children}) => {
+const AppLayout: React.FC = () => {
   const nav = useNavigate();
   const { user, logout } = useAuth();
 
@@ -127,9 +123,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({children}) => {
               justifyContent: "center",
               gap: "10px",
             }}
+            defaultSelectedKeys={["home"]}
           >
             <Menu.Item key="home">
-              <Link to="/home">HOME</Link>
+              <Link to="/">HOME</Link>
             </Menu.Item>
             <Menu.Item key="shop">SHOP SPECIES</Menu.Item>
             <Menu.Item key="gallery">GALLERY</Menu.Item>
@@ -139,21 +136,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({children}) => {
         </div>
       </Header>
 
-      <Content
-        style={{
-          flexGrow: 1,
-          width: "100%",
-          maxWidth: "1200px",
-          padding: "20px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          margin: "0 auto",
-        }}
-      >
-        {children}
-        
+      <Content>
+        <Outlet />
       </Content>
 
       <Footer
