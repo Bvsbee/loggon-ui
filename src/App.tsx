@@ -8,6 +8,7 @@ import AppLayout from "./components/layout/Layout.tsx";
 import Home from "./screens/Home.tsx";
 import AdminLayout from "./admin/layout/AdminLayout.tsx";
 import AdminDashboard from "./admin/AdminDashboard.tsx";
+import Products from "./screens/Products.tsx";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<Home />}></Route>
+          <Route path="/products" element={<Products />} />
         </Route>
 
         <Route element={<AuthLayout />}>
