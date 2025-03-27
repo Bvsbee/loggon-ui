@@ -1,11 +1,31 @@
-import { Layout, Menu, Table } from "antd";
+import { Table } from "antd";
 import AddProductButton from "../components/Admin/AdminDashBoard/AddProductButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getProducts } from "../api/fetch/useFetchProducts";
+import Product from "../classses/Product";
+import { data } from "react-router";
 
 const AdminDashboard = () => {
-  const { Content, Sider } = Layout;
-
   const [visible, setVisible] = useState<boolean>(false);
+
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const data = await getProducts();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [products]);
 
   const columns = [
     {
@@ -39,7 +59,7 @@ const AdminDashboard = () => {
         visible={visible}
       />
       <div>
-        <Table columns={columns}></Table>
+        <Table columns={columns} dataSource={products}></Table>
       </div>
     </div>
   );
