@@ -2,7 +2,8 @@ import React from "react";
 import { Layout, Avatar, Dropdown, Menu, Input, Button, MenuProps } from "antd";
 import { UserOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router";
+import { Outlet, useNavigate } from "react-router";
+import { Link } from "react-router";
 
 const { Header, Content, Footer } = Layout;
 const { Search } = Input;
@@ -48,7 +49,7 @@ const AppLayout: React.FC = () => {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "0 50px",
-          height: "140px",
+          height: "150px",
           width: "100%",
         }}
       >
@@ -122,8 +123,11 @@ const AppLayout: React.FC = () => {
               justifyContent: "center",
               gap: "10px",
             }}
+            defaultSelectedKeys={["home"]}
           >
-            <Menu.Item key="home">HOME</Menu.Item>
+            <Menu.Item key="home">
+              <Link to="/">HOME</Link>
+            </Menu.Item>
             <Menu.Item key="shop">SHOP SPECIES</Menu.Item>
             <Menu.Item key="gallery">GALLERY</Menu.Item>
             <Menu.Item key="about">ABOUT</Menu.Item>
@@ -132,17 +136,8 @@ const AppLayout: React.FC = () => {
         </div>
       </Header>
 
-      <Content
-        style={{
-          flexGrow: 1,
-          width: "100%",
-          padding: "20px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <h1>Welcome {user?.firstName}</h1>
+      <Content>
+        <Outlet />
       </Content>
 
       <Footer

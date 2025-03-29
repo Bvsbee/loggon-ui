@@ -3,8 +3,9 @@ import Login from "./screens/Login.tsx";
 import Signup from "./screens/Signup.tsx";
 import AuthLayout from "./components/layout/AuthLayout.tsx";
 import "./App.css";
-import Home from "./screens/Home.tsx";
+
 import AppLayout from "./components/layout/Layout.tsx";
+import Home from "./screens/Home.tsx";
 
 function App() {
   return (
