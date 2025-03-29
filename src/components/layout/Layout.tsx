@@ -128,10 +128,11 @@ const AppLayout: React.FC = () => {
             <Menu.Item key="home">
               <Link to="/">HOME</Link>
             </Menu.Item>
-            <Menu.Item key="shop">SHOP SPECIES</Menu.Item>
-            <Menu.Item key="gallery">GALLERY</Menu.Item>
-            <Menu.Item key="about">ABOUT</Menu.Item>
-            <Menu.Item key="contact">CONTACT</Menu.Item>
+            <Menu.Item key="products">
+              <Link to="/products">PRODUCTS</Link>
+            </Menu.Item>
+
+
           </Menu>
         </div>
       </Header>
