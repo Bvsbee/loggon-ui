@@ -20,7 +20,7 @@ interface AddProductButtonProps {
   visible: boolean;
 }
 
-const { Option } = Select;
+const { Option, OptGroup } = Select;
 
 interface Category {
   id: string;
@@ -42,6 +42,25 @@ const AddProductButton = ({
     form.submit();
     handleModalVisibility();
   };
+
+  const woodOptions = [
+    {
+      label: "Hardwood",
+      options: [
+        { label: "Oak", value: "oak", category: "Hardwood" },
+        { label: "Maple", value: "maple", category: "Hardwood" },
+        { label: "Walnut", value: "walnut", category: "Hardwood" },
+      ],
+    },
+    {
+      label: "Softwood",
+      options: [
+        { label: "Pine", value: "pine", category: "Softwood" },
+        { label: "Cedar", value: "cedar", category: "Softwood" },
+        { label: "Fir", value: "fir", category: "Softwood" },
+      ],
+    },
+  ];
 
   const onFinish = async (values: Product) => {
     try {
@@ -73,6 +92,27 @@ const AddProductButton = ({
     fetchCategories();
   }, []);
 
+  const handleSelectChange = (value: string) => {
+    const foundWood = woodOptions
+      .flatMap((group) => group.options)
+      .find((wood) => wood.value === value);
+
+    if (foundWood) {
+      // Set in State (optional, for display/debugging)
+      setSelectedWood({ name: foundWood.value, category: foundWood.category });
+
+      // Update form field manually
+      form.setFieldsValue({
+        wood: { name: foundWood.value, category: foundWood.category },
+      });
+    }
+  };
+
+  const [selectedWood, setSelectedWood] = useState<{
+    name: string;
+    category: string;
+  } | null>(null);
+
   return (
     <Content>
       <Button onClick={handleModalVisibility}>Add New Product</Button>
@@ -90,25 +130,15 @@ const AddProductButton = ({
                   },
                 ]}
               >
-                <Input style={{ width: "100%" }} />
-              </Item>
-            </Col>
-            <Col span={20}>
-              <Item
-                name="categoryId"
-                label="Category"
-                rules={[
-                  {
-                    required: false,
-                    message: "Please select a Category!",
-                  },
-                ]}
-              >
-                <Select style={{ width: "100%" }} loading={loading}>
-                  {categories.map((category) => (
-                    <Option key={category.id} value={category.id}>
-                      {category.name}
-                    </Option>
+                <Select placeholder="Select wood" onChange={handleSelectChange}>
+                  {woodOptions.map((group) => (
+                    <OptGroup key={group.label} label={group.label}>
+                      {group.options.map((wood) => (
+                        <Option key={wood.value} value={wood.value}>
+                          {wood.label}
+                        </Option>
+                      ))}
+                    </OptGroup>
                   ))}
                 </Select>
               </Item>

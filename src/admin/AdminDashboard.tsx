@@ -3,7 +3,6 @@ import AddProductButton from "../components/Admin/AdminDashBoard/AddProductButto
 import { useEffect, useState } from "react";
 import { getProducts } from "../api/fetch/useFetchProducts";
 import Product from "../classses/Product";
-import { data } from "react-router";
 
 const AdminDashboard = () => {
   const [visible, setVisible] = useState<boolean>(false);

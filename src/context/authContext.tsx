@@ -27,6 +27,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  {
+    console.log({ user });
+  }
+
   const login = async (userData: UserModel, token: string) => {
     if (!userData?.email) {
       console.error("User email is missing!");
@@ -59,7 +63,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         user,
         token,
         isAuthenticated: !!user,
-        isAdmin: user?.isAdmin ?? false, 
+        isAdmin: user?.isAdmin ?? false,
         login,
         logout,
       }}
