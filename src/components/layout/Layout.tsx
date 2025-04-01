@@ -49,7 +49,7 @@ const AppLayout: React.FC = () => {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "0 50px",
-          height: "150px",
+          height: "168px",
           width: "100%",
         }}
       >
@@ -63,9 +63,9 @@ const AppLayout: React.FC = () => {
             }}
           >
             <img
-              src="/logo.png"
+              src="/FullLogo_Transparent_NoBuffer-2.png"
               alt="Logo"
-              style={{ height: "125px", marginTop: "-10px" }}
+              style={{ height: "120px", marginTop: "13px" }}
             />
           </div>
 

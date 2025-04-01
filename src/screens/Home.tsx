@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Button, Row, Col, Card, Carousel } from "antd";
+import { Layout, Button, Row, Col, Card, Carousel, Divider } from "antd";
 import {
   ShoppingOutlined,
   RocketOutlined,
@@ -34,6 +34,8 @@ const Home: React.FC = () => {
         width: "100%",
       }}
     >
+
+      
       {/* Company Info & CTA */}
       <div
         style={{
@@ -77,6 +79,8 @@ const Home: React.FC = () => {
           <p>Our wood species are carefully sourced for top-tier quality.</p>
         </Col>
       </Row>
+
+      <Divider style={{borderColor: "#606c38"}}></Divider>
 
       {/* New Arrivals */}
       <div
