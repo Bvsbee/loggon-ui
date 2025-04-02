@@ -18,6 +18,7 @@ import Product from "../../../classses/Product";
 interface AddProductButtonProps {
   handleModalVisibility: () => void;
   visible: boolean;
+  refetch: () => void;
 }
 
 const { Option, OptGroup } = Select;
@@ -30,6 +31,7 @@ interface Category {
 const AddProductButton = ({
   handleModalVisibility,
   visible,
+  refetch,
 }: AddProductButtonProps) => {
   const { Content } = Layout;
   const { Dragger } = Upload;
@@ -41,6 +43,7 @@ const AddProductButton = ({
   const onSubmit = () => {
     form.submit();
     handleModalVisibility();
+    refetch();
   };
 
   const woodOptions = [
