@@ -46,6 +46,17 @@ const AddProductButton = ({
     refetch();
   };
 
+  const dimensionOptions = [
+    { label: "2x4", value: "2x4" },
+    { label: "2x6", value: "2x6" },
+    { label: "4x4", value: "4x4" },
+    { label: "4x8", value: "4x8" },
+    { label: "6x6", value: "6x6" },
+    { label: "8x10", value: "8x10" },
+    { label: "10x12", value: "10x12" },
+    { label: "12x12", value: "12x12" },
+  ];
+
   const woodOptions = [
     {
       label: "Hardwood",
@@ -158,6 +169,20 @@ const AddProductButton = ({
                 ]}
               >
                 <InputNumber style={{ width: "100%" }} />
+              </Item>
+            </Col>
+            <Col span={20}>
+              <Item
+                name="dimensions"
+                label="Dimensions"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input a Quantity!",
+                  },
+                ]}
+              >
+                <Select options={dimensionOptions}></Select>
               </Item>
             </Col>
             <Col span={20}>

@@ -5,6 +5,7 @@ import { useFetchProducts } from "../api/fetch/useFetchProducts";
 import Product from "../utils/models/ProductModel";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import loggonAPI from "../api/api";
+import { data } from "react-router";
 
 const AdminDashboard = () => {
   const { Item } = Form;
@@ -21,6 +22,8 @@ const AdminDashboard = () => {
   );
 
   const { data: products, refetch } = useFetchProducts();
+
+  console.log("Products", { products });
 
   const handleEdit = (row: Product) => {
     console.log(row);
@@ -71,17 +74,22 @@ const AdminDashboard = () => {
       dataIndex: "name",
     },
     {
-      title: "Description",
-      dataIndex: "description",
+      title: "Quantity",
+      dataIndex: "quantity",
+    },
+    {
+      title: "Dimensions",
+      dataIndex: "dimensions",
     },
     {
       title: "Category",
       dataIndex: "category",
     },
     {
-      title: "Quantity",
-      dataIndex: "quantity",
+      title: "Description",
+      dataIndex: "description",
     },
+
     {
       title: "Price",
       dataIndex: "price",
