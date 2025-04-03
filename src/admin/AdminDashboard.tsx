@@ -14,7 +14,6 @@ const AdminDashboard = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const [editVisible, setEditVisible] = useState<boolean>(false);
 
-  // const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(
@@ -26,6 +25,7 @@ const AdminDashboard = () => {
   const handleEdit = (row: Product) => {
     console.log(row);
     form.setFieldsValue(row);
+    setSelectedProduct(row);
     handleEditModalVisibility();
   };
 
@@ -48,29 +48,21 @@ const AdminDashboard = () => {
     }
   };
 
+  console.log("Selected Product", selectedProduct);
+
   const handleUpdate = async () => {
     try {
-      const response = await loggonAPI.patch(`product/${selectedProduct?.id}`, {
-        headers: {
-          // Authorization: `Bearer ${token}`, // Send the token here\
-          "Content-Type": "application/json",
-          method: "PATCH",
-        },
-        params: {
-          id: selectedProduct?.id,
-          description: selectedProduct?.description,
-          quantity: selectedProduct?.quantity,
-          price: selectedProduct?.price,
-        },
-      });
+      const updatedProduct: Product = form.getFieldsValue(); // Get latest values from form
 
-      return response;
+      updatedProduct.quantity = Number(updatedProduct.quantity);
+      updatedProduct.price = Number(updatedProduct.price);
+
+      await loggonAPI.patch(`product/${selectedProduct?.id}`, updatedProduct);
+      handleEditModalVisibility();
+      refetch();
     } catch (error) {
       console.log("Error updating product: ", error);
     }
-
-    handleEditModalVisibility();
-    refetch();
   };
 
   const columns = [
@@ -122,7 +114,18 @@ const AdminDashboard = () => {
   ];
 
   const handleModalVisibility = () => setVisible(!visible);
-  const handleEditModalVisibility = () => setEditVisible(!visible);
+  const handleEditModalVisibility = () => setEditVisible(!editVisible);
+
+  const handleChange = (changedValues: Partial<Product>) => {
+    setSelectedProduct(
+      (prev) =>
+        ({
+          ...prev,
+          changedValues,
+        } as Product)
+    );
+    console.log(selectedProduct);
+  };
 
   return (
     <div>
@@ -141,7 +144,10 @@ const AdminDashboard = () => {
         onCancel={handleEditModalVisibility}
         onOk={handleUpdate}
       >
-        <Form form={form} onValuesChange={setSelectedProduct}>
+        <Form
+          form={form}
+          onValuesChange={(_, allValues) => handleChange(allValues)}
+        >
           <Row>
             <Item name="name" label="Name">
               <Input disabled />

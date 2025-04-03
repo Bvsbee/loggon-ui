@@ -5,7 +5,7 @@ import { UserOutlined } from "@ant-design/icons";
 import { useAuth } from "../../context/AuthContext";
 
 const AdminLayout = () => {
-  const { Header, Footer, Content } = Layout;
+  const { Header, Footer, Content, Sider } = Layout;
 
   const { logout } = useAuth();
 
@@ -31,13 +31,6 @@ const AdminLayout = () => {
     <Layout>
       <Header className={styles.header}>
         <a href="/">LoggOn</a>
-        <Dropdown menu={{ items }} placement="bottomRight">
-          <Avatar
-            size="large"
-            icon={<UserOutlined />}
-            style={{ cursor: "pointer" }}
-          />
-        </Dropdown>
       </Header>
 
       <Content>
