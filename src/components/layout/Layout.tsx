@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Layout, Avatar, Dropdown, Menu, Input, Button, MenuProps } from "antd";
 import { UserOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { useAuth } from "../../context/AuthContext";
 import { Outlet, useNavigate } from "react-router";
 import { Link } from "react-router";
+import { getCart } from "../../api/fetch/fetchCartItems";
+import { useQuery } from "@tanstack/react-query";
 
 const { Header, Content, Footer } = Layout;
 const { Search } = Input;
@@ -12,15 +14,23 @@ const AppLayout: React.FC = () => {
   const nav = useNavigate();
   const { user, logout } = useAuth();
 
+  const [cartData, setCartData] = useState<Cart>(undefined);
+
+  const { data, isLoading, isError, error, refetch } = useQuery({
+    queryKey: ["cartData"],
+    queryFn: getCart(user),
+  });
+
+  console.log(data);
   const items: MenuProps["items"] = [
-    {
-      label: <a href="/profile">Profile</a>,
-      key: "0",
-    },
-    {
-      label: <a href="/settings">Settings</a>,
-      key: "1",
-    },
+    ...(user?.isAdmin
+      ? [
+          {
+            label: <a href="/admin">Admin Dashboard</a>,
+            key: "3",
+          },
+        ]
+      : []),
     {
       label: <a href="/">Logout</a>,
       key: "2",
@@ -95,6 +105,7 @@ const AppLayout: React.FC = () => {
             }}
           >
             <ShoppingCartOutlined
+              onClick={() => nav("/cart")}
               style={{ fontSize: "24px", cursor: "pointer" }}
             />
 
@@ -131,8 +142,6 @@ const AppLayout: React.FC = () => {
             <Menu.Item key="products">
               <Link to="/products">PRODUCTS</Link>
             </Menu.Item>
-
-
           </Menu>
         </div>
       </Header>

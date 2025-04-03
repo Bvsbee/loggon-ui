@@ -13,7 +13,7 @@ import {
 import { useEffect, useState } from "react";
 import { getCategories } from "../../../api/fetch/useFetchCategories";
 import { addProduct } from "../../../api/product/createProduct";
-import Product from "../../../classses/Product";
+import Product from "../../../utils/models/ProductModel";
 
 interface AddProductButtonProps {
   handleModalVisibility: () => void;

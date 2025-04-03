@@ -89,6 +89,7 @@ const totalRowStyle = {
 
 const Checkout = () => {
   const [form] = Form.useForm();
+
   return (
     <div
       style={{
@@ -148,6 +149,10 @@ const Checkout = () => {
                       required: true,
                       message: "Please Enter a Email Address",
                     },
+                    {
+                      type: "email",
+                      message: "Please Enter a Valid Email Address",
+                    },
                   ]}
                   {...formItemLayout}
                 >
@@ -162,6 +167,11 @@ const Checkout = () => {
                     {
                       required: true,
                       message: "Please Enter a Phone Number",
+                    },
+                    {
+                      pattern: /^[0-9]{3}[-]?[0-9]{3}[-]?[0-9]{4}$/,
+                      message:
+                        "Phone number must be 10 digits long and may include dashes",
                     },
                   ]}
                   {...formItemLayout}
@@ -198,7 +208,7 @@ const Checkout = () => {
                   ]}
                   {...formItemLayout}
                 >
-                  <Select></Select>
+                  <Input />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -213,7 +223,7 @@ const Checkout = () => {
                   ]}
                   {...formItemLayout}
                 >
-                  <Select></Select>
+                  <Input />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -243,7 +253,7 @@ const Checkout = () => {
                   ]}
                   {...formItemLayout}
                 >
-                  <Select></Select>
+                  <Input />
                 </Form.Item>
               </Col>
             </Row>

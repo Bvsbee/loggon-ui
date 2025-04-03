@@ -24,11 +24,20 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser));
       setToken(storedToken);
+
+      // Fetch latest user profile on page refresh
+      getProfile(JSON.parse(storedUser).email, storedToken)
+        .then((updatedProfile) => {
+          setUser(updatedProfile);
+          localStorage.setItem("user", JSON.stringify(updatedProfile)); // Update storage with full profile
+        })
+        .catch((error) => console.error("Error fetching profile", error));
     }
   }, []);
 
   {
-    console.log({ user });
+    console.log("User", { user });
+    console.log(user);
   }
 
   const login = async (userData: UserModel, token: string) => {
@@ -38,12 +47,15 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     try {
+      // Fetch the full profile
       const userProfile = await getProfile(userData.email, token);
 
+      // Update state with the full profile
       setUser(userProfile);
+      setToken(token);
 
-      console.log("user", user);
-      localStorage.setItem("user", JSON.stringify(userData));
+      // Store the full user profile and token in localStorage
+      localStorage.setItem("user", JSON.stringify(userProfile));
       localStorage.setItem("token", token);
     } catch (error) {
       console.error("Error fetching profile", error);

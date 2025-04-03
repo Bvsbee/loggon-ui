@@ -10,6 +10,7 @@ import AdminLayout from "./admin/layout/AdminLayout.tsx";
 import AdminDashboard from "./admin/AdminDashboard.tsx";
 import Products from "./screens/Products.tsx";
 import Checkout from "./screens/Checkout.tsx";
+import Cart from "./screens/Cart.tsx";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/cart" element={<Cart />} />
         </Route>
 
         <Route element={<AdminLayout />}>

@@ -2,7 +2,7 @@ import { Button, Form, Input, Modal, Popconfirm, Row, Table } from "antd";
 import AddProductButton from "../components/Admin/AdminDashBoard/AddProductButton";
 import { useState } from "react";
 import { useFetchProducts } from "../api/fetch/useFetchProducts";
-import Product from "../classses/Product";
+import Product from "../utils/models/ProductModel";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import loggonAPI from "../api/api";
 
