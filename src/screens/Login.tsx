@@ -2,7 +2,7 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Card, Col, Form, Layout, Tag } from "antd";
 import { Link, useNavigate } from "react-router";
 import { LoginForm, ProFormText } from "@ant-design/pro-components";
-import { registerUser } from "../api/authAPI";
+import { loginUser } from "../api/authAPI";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 const Login = () => {
@@ -17,7 +17,7 @@ const Login = () => {
 
   const onFinish = async (values: { email: string; password: string }) => {
     try {
-      const response = await registerUser(values);
+      const response = await loginUser(values);
 
       if (response.token && response.userId) {
         login(values, response.token);
