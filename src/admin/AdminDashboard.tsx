@@ -44,7 +44,7 @@ const AdminDashboard = () => {
           id: row.id,
         },
       });
-
+      refetch();
       return response;
     } catch (error) {
       console.log("Error deleting product: ", error);
@@ -74,6 +74,10 @@ const AdminDashboard = () => {
       dataIndex: "name",
     },
     {
+      title: "Species",
+      dataIndex: "species",
+    },
+    {
       title: "Quantity",
       dataIndex: "quantity",
     },
@@ -81,10 +85,7 @@ const AdminDashboard = () => {
       title: "Dimensions",
       dataIndex: "dimensions",
     },
-    {
-      title: "Category",
-      dataIndex: "category",
-    },
+
     {
       title: "Description",
       dataIndex: "description",
@@ -158,13 +159,13 @@ const AdminDashboard = () => {
         >
           <Row>
             <Item name="name" label="Name">
+              <Input />
+            </Item>
+            <Item name="species" label="Species">
               <Input disabled />
             </Item>
             <Item name="description" label="Description">
               <Input />
-            </Item>
-            <Item name="category" label="Category">
-              <Input disabled />
             </Item>
             <Item name="quantity" label="Quantity">
               <Input />

@@ -61,17 +61,17 @@ const AddProductButton = ({
     {
       label: "Hardwood",
       options: [
-        { label: "Oak", value: "oak", category: "Hardwood" },
-        { label: "Maple", value: "maple", category: "Hardwood" },
-        { label: "Walnut", value: "walnut", category: "Hardwood" },
+        { label: "Oak", value: "Oak", category: "Hardwood" },
+        { label: "Maple", value: "Maple", category: "Hardwood" },
+        { label: "Walnut", value: "Walnut", category: "Hardwood" },
       ],
     },
     {
       label: "Softwood",
       options: [
-        { label: "Pine", value: "pine", category: "Softwood" },
-        { label: "Cedar", value: "cedar", category: "Softwood" },
-        { label: "Fir", value: "fir", category: "Softwood" },
+        { label: "Pine", value: "Pine", category: "Softwood" },
+        { label: "Cedar", value: "Cedar", category: "Softwood" },
+        { label: "Fir", value: "Fir", category: "Softwood" },
       ],
     },
   ];
@@ -84,6 +84,8 @@ const AddProductButton = ({
     } catch (error: Error) {
       console.error("Error adding product:", error);
     }
+
+    refetch();
   };
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -113,18 +115,17 @@ const AddProductButton = ({
 
     if (foundWood) {
       // Set in State (optional, for display/debugging)
-      setSelectedWood({ name: foundWood.value, category: foundWood.category });
+      setSelectedWood({ name: foundWood.value });
 
       // Update form field manually
       form.setFieldsValue({
-        wood: { name: foundWood.value, category: foundWood.category },
+        wood: { name: foundWood.value },
       });
     }
   };
 
   const [selectedWood, setSelectedWood] = useState<{
     name: string;
-    category: string;
   } | null>(null);
 
   return (
@@ -135,12 +136,12 @@ const AddProductButton = ({
           <Row gutter={6}>
             <Col span={20}>
               <Item
-                name="name"
-                label="Name"
+                name="species"
+                label="Species"
                 rules={[
                   {
                     required: true,
-                    message: "Please input a Name!",
+                    message: "Please input a Species!",
                   },
                 ]}
               >
@@ -155,6 +156,20 @@ const AddProductButton = ({
                     </OptGroup>
                   ))}
                 </Select>
+              </Item>
+            </Col>
+            <Col>
+              <Item
+                name="name"
+                label="Name"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input a Species!",
+                  },
+                ]}
+              >
+                <Input />
               </Item>
             </Col>
             <Col span={20}>
