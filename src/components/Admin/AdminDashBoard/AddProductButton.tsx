@@ -10,10 +10,10 @@ import {
   Select,
   Upload,
 } from "antd";
-import { useEffect, useState } from "react";
-import { getCategories } from "../../../api/fetch/useFetchCategories";
+import { useState } from "react";
 import { addProduct } from "../../../api/product/createProduct";
 import Product from "../../../utils/models/ProductModel";
+import { PlusOutlined } from "@ant-design/icons";
 
 interface AddProductButtonProps {
   handleModalVisibility: () => void;
@@ -91,23 +91,6 @@ const AddProductButton = ({
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      setLoading(true);
-      try {
-        const data = await getCategories();
-        // Assuming the API returns an array of categories with id and name
-        setCategories(data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
   const handleSelectChange = (value: string) => {
     const foundWood = woodOptions
       .flatMap((group) => group.options)
@@ -130,11 +113,17 @@ const AddProductButton = ({
 
   return (
     <Content>
-      <Button onClick={handleModalVisibility}>Add New Product</Button>
+      <Button
+        icon={<PlusOutlined />}
+        style={{ backgroundColor: "#5c7a3d", color: "white" }}
+        onClick={handleModalVisibility}
+      >
+        Add New Product
+      </Button>
       <Modal open={visible} onOk={onSubmit} onCancel={handleModalVisibility}>
-        <Form form={form} onFinish={onFinish}>
+        <Form layout="vertical" form={form} onFinish={onFinish}>
           <Row gutter={6}>
-            <Col span={20}>
+            <Col span={12}>
               <Item
                 name="species"
                 label="Species"
@@ -158,7 +147,7 @@ const AddProductButton = ({
                 </Select>
               </Item>
             </Col>
-            <Col>
+            <Col span={12}>
               <Item
                 name="name"
                 label="Name"
@@ -172,7 +161,7 @@ const AddProductButton = ({
                 <Input />
               </Item>
             </Col>
-            <Col span={20}>
+            <Col span={12}>
               <Item
                 name="quantity"
                 label="Quantity"
@@ -186,7 +175,7 @@ const AddProductButton = ({
                 <InputNumber style={{ width: "100%" }} />
               </Item>
             </Col>
-            <Col span={20}>
+            <Col span={12}>
               <Item
                 name="dimensions"
                 label="Dimensions"
@@ -200,7 +189,7 @@ const AddProductButton = ({
                 <Select options={dimensionOptions}></Select>
               </Item>
             </Col>
-            <Col span={20}>
+            <Col span={12}>
               <Item
                 name="price"
                 label="Price"
@@ -214,7 +203,7 @@ const AddProductButton = ({
                 <InputNumber style={{ width: "100%" }} />
               </Item>
             </Col>
-            <Col span={20}>
+            <Col span={12}>
               <Item
                 name="description"
                 label="Description"
@@ -228,7 +217,7 @@ const AddProductButton = ({
                 <Input style={{ width: "100%" }} />
               </Item>
             </Col>
-            <Col span={20}>
+            <Col span={24}>
               <Item
                 name="image"
                 label="Product Picture"
