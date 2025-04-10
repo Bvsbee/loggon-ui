@@ -46,11 +46,6 @@ const AdminLayout = () => {
       label: <Link to="/admin">Dashboard</Link>,
     },
     {
-      key: "users",
-      icon: <TeamOutlined />,
-      label: <Link to="/admin/users">User Management</Link>,
-    },
-    {
       key: "products",
       icon: <ShoppingOutlined />,
       label: <Link to="/admin/inventory">Product Management</Link>,

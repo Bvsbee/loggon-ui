@@ -12,7 +12,6 @@ import Products from "./screens/Products.tsx";
 import Checkout from "./screens/Checkout.tsx";
 import Cart from "./screens/Cart.tsx";
 import InventoryManagement from "./admin/InventoryManagement.tsx";
-import UserManagement from "./admin/UserManagement.tsx";
 
 function App() {
   return (
@@ -32,7 +31,7 @@ function App() {
 
         <Route element={<AdminLayout />}>
           <Route path="/admin" element={<AdminDashboard />}></Route>
-          <Route path="/admin/users" element={<UserManagement />}></Route>
+
           <Route
             path="/admin/inventory"
             element={<InventoryManagement />}

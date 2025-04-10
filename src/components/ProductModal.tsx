@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
-import { Modal, Row, Col, Descriptions, Button, Space, Typography } from 'antd';
-import { ShoppingCartOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import React, { useState } from "react";
+import { Modal, Row, Col, Descriptions, Button, Space, Typography } from "antd";
+import {
+  ShoppingCartOutlined,
+  MinusOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 
 const { Text, Title, Paragraph } = Typography;
 
@@ -15,39 +19,44 @@ interface Product {
   quantity: number;
 }
 
-// Define props 
+// Define props
 interface ProductModalProps {
-  product: Product | null;   // The product to display
-  visible: boolean;               
-  onClose: () => void;           
-  onAddToCart: (product: Product, quantity: number) => void;  // Callback for adding to cart
+  product: Product | null; // The product to display
+  visible: boolean;
+  onClose: () => void;
+  onAddToCart: (id: string, quantity: number) => void; // Callback for adding to cart
 }
 
-const ProductModal: React.FC<ProductModalProps> = ({ product, visible, onClose, onAddToCart }) => {
-
-  const [cartQuantity, setCartQuantity] = useState(1); 
+const ProductModal: React.FC<ProductModalProps> = ({
+  product,
+  visible,
+  onClose,
+  onAddToCart,
+}) => {
+  const [cartQuantity, setCartQuantity] = useState(1);
 
   //decrease quantity, ensuring it doesn't go below 1
   const decreaseQuantity = () => {
-    setCartQuantity(prev => Math.max(1, prev - 1));
+    setCartQuantity((prev) => Math.max(1, prev - 1));
   };
 
   //increase quantity, with max limit based on product stock
   const increaseQuantity = () => {
     if (product) {
-      setCartQuantity(prev => Math.min(product.quantity, prev + 1));
+      setCartQuantity((prev) => Math.min(product.quantity, prev + 1));
     }
   };
 
   //handle adding product to cart with selected quantity
   const handleAddToCart = () => {
     if (product) {
-      onAddToCart(product, cartQuantity);
+      onAddToCart(product.id, cartQuantity);
+      console.log("product Id:", product.id);
       onClose();
     }
   };
 
-  if (!product) return null;//if no product wont render
+  if (!product) return null; //if no product wont render
 
   return (
     <Modal
@@ -59,31 +68,31 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, visible, onClose, 
         <Button key="close" onClick={onClose}>
           Close
         </Button>,
-        <Button 
-          key="addToCart" 
-          type="primary" 
-          icon={<ShoppingCartOutlined />} 
+        <Button
+          key="addToCart"
+          type="primary"
+          icon={<ShoppingCartOutlined />}
           onClick={handleAddToCart}
           disabled={product.quantity <= 0}
         >
           Add to Cart
-        </Button>
+        </Button>,
       ]}
     >
       {/* product image and detail*/}
       <Row gutter={[24, 24]}>
         {/* product image*/}
         <Col xs={24} md={12}>
-          <img 
-            src={product.image} 
-            alt={product.name} 
-            style={{ 
-              width: '100%', 
-              objectFit: 'contain', 
-              maxHeight: '300px',
-              borderRadius: '8px',
-              padding: '12px'
-            }} 
+          <img
+            src={product.image}
+            alt={product.name}
+            style={{
+              width: "100%",
+              objectFit: "contain",
+              maxHeight: "300px",
+              borderRadius: "8px",
+              padding: "12px",
+            }}
           />
         </Col>
         {/* product details column */}
@@ -92,8 +101,12 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, visible, onClose, 
             <Descriptions.Item label="Price">
               <Text strong>${Number(product.price).toFixed(2)}</Text>
             </Descriptions.Item>
-            <Descriptions.Item label="Species">{product.species}</Descriptions.Item>
-            <Descriptions.Item label="Dimensions">{product.dimensions}</Descriptions.Item>
+            <Descriptions.Item label="Species">
+              {product.species}
+            </Descriptions.Item>
+            <Descriptions.Item label="Dimensions">
+              {product.dimensions}
+            </Descriptions.Item>
             {/* stock status*/}
             <Descriptions.Item label="Availability">
               {product.quantity > 5 && <Text type="success">In Stock</Text>}
@@ -105,19 +118,21 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, visible, onClose, 
             {/* quantity selctor*/}
             <Descriptions.Item label="Quantity">
               <Space>
-                <Button 
-                  icon={<MinusOutlined />} 
+                <Button
+                  icon={<MinusOutlined />}
                   onClick={decreaseQuantity}
                   disabled={cartQuantity <= 1}
                 />
                 <Text>{cartQuantity}</Text>
-                <Button 
-                  icon={<PlusOutlined />} 
+                <Button
+                  icon={<PlusOutlined />}
                   onClick={increaseQuantity}
                   disabled={cartQuantity >= product.quantity}
                 />
                 <Text type="secondary">
-                  {product.quantity > 0 ? `(${product.quantity} available)` : ''}
+                  {product.quantity > 0
+                    ? `(${product.quantity} available)`
+                    : ""}
                 </Text>
               </Space>
             </Descriptions.Item>
@@ -133,4 +148,4 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, visible, onClose, 
   );
 };
 
-export default ProductModal; 
+export default ProductModal;

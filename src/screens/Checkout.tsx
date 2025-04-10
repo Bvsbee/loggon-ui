@@ -1,4 +1,8 @@
+import { useQuery } from "@tanstack/react-query";
 import { Button, Card, Col, Form, Input, Row, Select } from "antd";
+import fetchCart from "../api/cart/fetchCart";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router";
 
 const checkoutFormCardProps = {
   style: {
@@ -88,8 +92,123 @@ const totalRowStyle = {
 };
 
 const Checkout = () => {
+  const states = [
+    "Alabama",
+    "Alaska",
+    "Arizona",
+    "Arkansas",
+    "California",
+    "Colorado",
+    "Connecticut",
+    "Delaware",
+    "Florida",
+    "Georgia",
+    "Hawaii",
+    "Idaho",
+    "Illinois",
+    "Indiana",
+    "Iowa",
+    "Kansas",
+    "Kentucky",
+    "Louisiana",
+    "Maine",
+    "Maryland",
+    "Massachusetts",
+    "Michigan",
+    "Minnesota",
+    "Mississippi",
+    "Missouri",
+    "Montana",
+    "Nebraska",
+    "Nevada",
+    "New Hampshire",
+    "New Jersey",
+    "New Mexico",
+    "New York",
+    "North Carolina",
+    "North Dakota",
+    "Ohio",
+    "Oklahoma",
+    "Oregon",
+    "Pennsylvania",
+    "Rhode Island",
+    "South Carolina",
+    "South Dakota",
+    "Tennessee",
+    "Texas",
+    "Utah",
+    "Vermont",
+    "Virginia",
+    "Washington",
+    "West Virginia",
+    "Wisconsin",
+    "Wyoming",
+  ];
+
   const [form] = Form.useForm();
 
+  const nav = useNavigate();
+
+  const { Option } = Select;
+
+  const { user } = useAuth();
+
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["checkout"],
+    queryFn: () => fetchCart(user?.id),
+    enabled: !!user?.id,
+  });
+  if (!user?.id) {
+    return <div>Please log in to proceed with checkout.</div>;
+  }
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  console.log("Checkout data", data);
+
+  const stateOptions = states?.map((s) => {
+    return (
+      <Option key={s} value={s}>
+        {s}
+      </Option>
+    );
+  });
+  const orderItems = data?.map((item) => {
+    return (
+      <div key={item.id}>
+        <p>Name: {item.product?.name}</p>
+        <p>Quantity: {item.quantity}</p>
+        <p>Price: ${item.product?.price}</p>
+      </div>
+    );
+  });
+  const orderSummary = data?.map((item) => {
+    const productPrice = parseFloat(item.product?.price || "0");
+    const quantity = item.quantity || 1;
+    const subtotal = productPrice * quantity;
+    const shipping = 5.0;
+    const taxRate = 0.08;
+    const tax = subtotal * taxRate;
+    const total = subtotal + shipping + tax;
+
+    return (
+      <div key={item.id}>
+        <p>Subtotal: ${subtotal.toFixed(2)}</p>
+        <p>Shipping: ${shipping.toFixed(2)}</p>
+        <p>Tax: ${tax.toFixed(2)}</p>
+        <p>Total: ${total.toFixed(2)}</p>
+      </div>
+    );
+  });
+
+  const handleCompleteOrder = () => {
+    nav("/");
+  };
   return (
     <div
       style={{
@@ -208,7 +327,7 @@ const Checkout = () => {
                   ]}
                   {...formItemLayout}
                 >
-                  <Input />
+                  <Select>{stateOptions}</Select>
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -257,12 +376,18 @@ const Checkout = () => {
                 </Form.Item>
               </Col>
             </Row>
-            <Button {...submitButtonProps}>Complete Order</Button>
+            <Button onClick={handleCompleteOrder} {...submitButtonProps}>
+              Complete Order
+            </Button>
           </Form>
         </Card>
 
         <Card {...orderSummaryCardProps}>
           <div style={sectionTitleStyle}>Order Summary</div>
+          {orderItems}
+
+          <hr />
+          {orderSummary}
         </Card>
       </div>
     </div>
