@@ -75,6 +75,7 @@ const AddProductButton = ({
 
   return (
     <Content>
+      
       <Button onClick={handleModalVisibility}>Add New Product</Button>
       <Modal open={visible} onOk={onSubmit} onCancel={handleModalVisibility}>
         <Form form={form} onFinish={onFinish}>

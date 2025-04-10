@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Layout, Card, Row, Col, Select, InputNumber, Slider, Space, Typography } from 'antd';
 import { useNavigate } from 'react-router';
+import S3Image from '../components/Admin/S3ImageKey';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
 const { Option } = Select;
+
+<S3Image imageKey = "https://loggonbucket.s3.us-east-1.amazonaws.com/purple-heart-lumber-b_234x156.jpg" />
 
 interface Product {
   id: string;

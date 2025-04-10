@@ -6,7 +6,7 @@ const S3Image = ({ imageKey }: { imageKey: string }) => {
 
   useEffect(() => {
     const fetchImageUrl = async () => {
-      const response = await fetch(`/api/files/${imageKey}`); // Adjust if your API is proxied
+      const response = await fetch(`/api/files/${imageKey}`); 
       const data = await response.json();
       setImageUrl(data.url);
     };
