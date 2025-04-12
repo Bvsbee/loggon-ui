@@ -7,6 +7,8 @@ export const getCart = async (user: UserModel) => {
     headers: {
         
     }
+
+  
   });
   return response.data;
 };

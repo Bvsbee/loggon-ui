@@ -22,11 +22,7 @@ const AdminLayout = () => {
   // Profile dropdown menu items
   const profileItems: MenuProps["items"] = [
     {
-      label: <Link to="/profile">Profile</Link>,
-      key: "0",
-    },
-    {
-      label: <Link to="/settings">Settings</Link>,
+      label: <Link to="/">Home</Link>,
       key: "1",
     },
     {

@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Avatar, Dropdown, Menu, Input, Button, MenuProps } from "antd";
+import {
+  Layout,
+  Avatar,
+  Dropdown,
+  Menu,
+  Input,
+  Button,
+  MenuProps,
+  Badge,
+} from "antd";
 import { UserOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { useAuth } from "../../context/AuthContext";
 import { Outlet, useNavigate } from "react-router";
 import { Link } from "react-router";
 import { getCart } from "../../api/fetch/fetchCartItems";
 import { useQuery } from "@tanstack/react-query";
+import fetchCart from "../../api/cart/fetchCart";
 
 const { Header, Content, Footer } = Layout;
 const { Search } = Input;
@@ -16,12 +26,13 @@ const AppLayout: React.FC = () => {
 
   const [cartData, setCartData] = useState<Cart>(undefined);
 
-  const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["cartData"],
-    queryFn: getCart(user),
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["checkout"],
+    queryFn: () => fetchCart(user?.id),
+    enabled: !!user?.id,
   });
 
-  console.log(data);
+  console.log("Cart", data?.items?.lengths);
   const items: MenuProps["items"] = [
     ...(user?.isAdmin
       ? [
@@ -104,10 +115,16 @@ const AppLayout: React.FC = () => {
               gap: "20px",
             }}
           >
-            <ShoppingCartOutlined
-              onClick={() => nav("/cart")}
-              style={{ fontSize: "24px", cursor: "pointer" }}
-            />
+            <Badge
+              count={data?.items?.length || 0}
+              size="small"
+              offset={[-2, 2]}
+            >
+              <ShoppingCartOutlined
+                onClick={() => nav("/cart")}
+                style={{ fontSize: "24px", cursor: "pointer" }}
+              />
+            </Badge>
 
             {user ? (
               <Dropdown menu={{ items }} placement="bottomRight">
