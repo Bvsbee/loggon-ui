@@ -11,7 +11,7 @@ import {
   Spin,
   Alert,
 } from "antd";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { useFetchProducts } from "../api/fetch/useFetchProducts";
 //import { ShoppingCartOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import ProductModal from "../components/ProductModal";
@@ -20,7 +20,7 @@ import addToCart from "../api/cart/addToCart";
 import { useAuth } from "../context/AuthContext";
 
 //const { Content } = Layout;
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 const { Option } = Select;
 
 interface Product {
@@ -36,6 +36,8 @@ interface Product {
 
 const Products: React.FC = () => {
   const nav = useNavigate();
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get('search') || '';
   const { data: productData, isLoading, error } = useFetchProducts();
   const [products, setProducts] = useState<Product[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
@@ -48,9 +50,19 @@ const Products: React.FC = () => {
 
   useEffect(() => {
     if (productData) {
-      setProducts(productData);
+      let filteredProducts = [...productData];
+      
+      // search filter
+      if (searchQuery) {
+        filteredProducts = filteredProducts.filter(product => 
+          product.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+      
+      setProducts(filteredProducts);
+
     }
-  }, [productData]);
+  }, [productData, searchQuery]);
 
   const handleProductClick = (product: Product) => {
     setSelectedProduct(product);

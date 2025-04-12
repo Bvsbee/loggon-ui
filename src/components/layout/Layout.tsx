@@ -53,6 +53,9 @@ const AppLayout: React.FC = () => {
 
   const handleSearch = (value: string) => {
     console.log("Searching:", value);
+    if (value.trim()) {
+      nav(`/products?search=${encodeURIComponent(value.trim())}`);
+    }
   };
 
   const handleClick = () => {
@@ -92,7 +95,7 @@ const AppLayout: React.FC = () => {
 
           <div style={{ flex: 2, display: "flex", justifyContent: "center" }}>
             <Search
-              placeholder="Search..."
+              placeholder="Search for wood here"
               allowClear
               onSearch={handleSearch}
               style={{
