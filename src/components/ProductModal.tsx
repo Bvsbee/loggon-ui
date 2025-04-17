@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Row, Col, Descriptions, Button, Space, Typography } from "antd";
 import {
   ShoppingCartOutlined,
@@ -46,6 +46,12 @@ const ProductModal: React.FC<ProductModalProps> = ({
       setCartQuantity((prev) => Math.min(product.quantity, prev + 1));
     }
   };
+
+  useEffect(() => {
+    if (!visible) {
+      setCartQuantity(1);
+    }
+  }, [visible]);
 
   //handle adding product to cart with selected quantity
   const handleAddToCart = () => {

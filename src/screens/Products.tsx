@@ -37,7 +37,7 @@ interface Product {
 const Products: React.FC = () => {
   const nav = useNavigate();
   const [searchParams] = useSearchParams();
-  const searchQuery = searchParams.get('search') || '';
+  const searchQuery = searchParams.get("search") || "";
   const { data: productData, isLoading, error } = useFetchProducts();
   const [products, setProducts] = useState<Product[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
@@ -51,16 +51,15 @@ const Products: React.FC = () => {
   useEffect(() => {
     if (productData) {
       let filteredProducts = [...productData];
-      
+
       // search filter
       if (searchQuery) {
-        filteredProducts = filteredProducts.filter(product => 
+        filteredProducts = filteredProducts.filter((product) =>
           product.name.toLowerCase().includes(searchQuery.toLowerCase())
         );
       }
-      
-      setProducts(filteredProducts);
 
+      setProducts(filteredProducts);
     }
   }, [productData, searchQuery]);
 
@@ -72,6 +71,7 @@ const Products: React.FC = () => {
 
   const handleModalClose = () => {
     setIsModalVisible(false);
+    setCartQuantity(1);
   };
 
   const { mutate } = useMutation({ mutationFn: addToCart });
