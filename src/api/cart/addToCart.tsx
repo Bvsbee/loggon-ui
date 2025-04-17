@@ -11,10 +11,11 @@ const addToCart = async ({
   quantity: number;
 }) => {
   try {
+    console.log("ProductID: ", id);
     const response = await loggonAPI.post("/cart", {
-      user,
-      id,
-      quantity,
+      userId: user?.id,
+      productId: id,
+      quantity: quantity,
     });
 
     return response.data;

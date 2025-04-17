@@ -1,5 +1,5 @@
 import { DeleteOutlined } from "@ant-design/icons";
-import { Button, Col, InputNumber, Popconfirm, Row, Table } from "antd";
+import { Button, Col, InputNumber, Popconfirm, Row, Table, Tag } from "antd";
 
 import Product from "../utils/models/ProductModel";
 import { useQuery } from "@tanstack/react-query";
@@ -21,8 +21,13 @@ const Cart = () => {
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["cart"],
     queryFn: () => fetchCart(user?.id),
-    staleTime: 0, // Disable caching (data will always be fresh)
   });
+
+  // const cartError = isError? () => {
+  //   return (
+  //     <Tag>Error Fetching Cart Data</Tag>
+  //   )
+  // }
 
   console.log("data", { data });
 
@@ -36,17 +41,6 @@ const Cart = () => {
   };
 
   const columns = [
-    {
-      title: "Product Image",
-      dataIndex: "image", // Access product image
-      render: (_, row) => (
-        <img
-          src={row.product?.image || "default-image-url"} // Provide a fallback image if image is null
-          alt="Product"
-          style={{ width: 50, height: 50 }}
-        />
-      ),
-    },
     {
       title: "Product Name",
       dataIndex: "product?.name", // Access product name
@@ -104,6 +98,13 @@ const Cart = () => {
     }
   };
 
+  // const cartData = data.map((p: Product) => ({
+  //   ...p,
+  //   key: p.id,
+  // }));
+
+  // console.log("cartData", cartData);
+
   return (
     <div
       style={{
@@ -116,7 +117,7 @@ const Cart = () => {
       <h1 style={{ color: "#3a4825", textAlign: "center", marginBottom: 30 }}>
         Your Shopping Cart
       </h1>
-      <Table dataSource={data} columns={columns}></Table>{" "}
+      <Table dataSource={data} columns={columns}></Table>
       <Button onClick={handleCheckout}>Checkout</Button>
     </div>
   );
