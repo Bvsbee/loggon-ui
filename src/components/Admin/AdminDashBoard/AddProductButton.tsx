@@ -76,9 +76,21 @@ const AddProductButton = ({
     },
   ];
 
+  const [imageUrl, setImageUrl] = useState<string>();
+  const beforeUpload = async (file) => {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setImageUrl(reader.result as string); // Save the base64 string
+    };
+
+    reader.readAsDataURL(file);
+    return false; // Prevent the default upload behavior and handle manually
+  };
+
   const onFinish = async (values: Product) => {
     try {
-      const result = await addProduct(values);
+      const result = await addProduct({ ...values, imageUrl });
       form.resetFields();
       console.log("New product:", result);
     } catch (error: Error) {
@@ -228,7 +240,10 @@ const AddProductButton = ({
                   },
                 ]}
               >
-                <Dragger style={{ width: "100%" }}></Dragger>
+                <Dragger
+                  beforeUpload={beforeUpload}
+                  style={{ width: "100%" }}
+                ></Dragger>
               </Item>
             </Col>
           </Row>

@@ -7,10 +7,14 @@ import fetchCart from "../api/cart/fetchCart";
 import { useAuth } from "../context/AuthContext";
 import loggonAPI from "../api/api";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 const Cart = () => {
-  const handleDelete = async (row) => {
-    await loggonAPI.delete("/cart", row.id);
+  const handleDelete = async (id) => {
+    
+    console.log("DeletedId: ", id);
+
+    await axios.delete("http://localhost:3000/cart", id);
     refetch();
   };
 
@@ -73,12 +77,12 @@ const Cart = () => {
     {
       title: "",
       dataIndex: "actions",
-      render: (_, row: Product) => {
+      render: (_, row) => {
         return (
           <>
             <Popconfirm
               title="Are you sure you want to delete this product?"
-              onConfirm={() => handleDelete(row)}
+              onConfirm={() => handleDelete(row.product?.id)}
               okText="Delete"
             >
               <Button
