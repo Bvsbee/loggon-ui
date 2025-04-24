@@ -3,6 +3,7 @@ import { Button, Card, Col, Form, Input, Row, Select } from "antd";
 import fetchCart from "../api/cart/fetchCart";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
+import { useState } from "react";
 
 const checkoutFormCardProps = {
   style: {
@@ -90,74 +91,76 @@ const totalRowStyle = {
   fontSize: 18,
   color: "#3a4825",
 };
+const states = [
+  "Alabama",
+  "Alaska",
+  "Arizona",
+  "Arkansas",
+  "California",
+  "Colorado",
+  "Connecticut",
+  "Delaware",
+  "Florida",
+  "Georgia",
+  "Hawaii",
+  "Idaho",
+  "Illinois",
+  "Indiana",
+  "Iowa",
+  "Kansas",
+  "Kentucky",
+  "Louisiana",
+  "Maine",
+  "Maryland",
+  "Massachusetts",
+  "Michigan",
+  "Minnesota",
+  "Mississippi",
+  "Missouri",
+  "Montana",
+  "Nebraska",
+  "Nevada",
+  "New Hampshire",
+  "New Jersey",
+  "New Mexico",
+  "New York",
+  "North Carolina",
+  "North Dakota",
+  "Ohio",
+  "Oklahoma",
+  "Oregon",
+  "Pennsylvania",
+  "Rhode Island",
+  "South Carolina",
+  "South Dakota",
+  "Tennessee",
+  "Texas",
+  "Utah",
+  "Vermont",
+  "Virginia",
+  "Washington",
+  "West Virginia",
+  "Wisconsin",
+  "Wyoming",
+];
 
 const Checkout = () => {
-  const states = [
-    "Alabama",
-    "Alaska",
-    "Arizona",
-    "Arkansas",
-    "California",
-    "Colorado",
-    "Connecticut",
-    "Delaware",
-    "Florida",
-    "Georgia",
-    "Hawaii",
-    "Idaho",
-    "Illinois",
-    "Indiana",
-    "Iowa",
-    "Kansas",
-    "Kentucky",
-    "Louisiana",
-    "Maine",
-    "Maryland",
-    "Massachusetts",
-    "Michigan",
-    "Minnesota",
-    "Mississippi",
-    "Missouri",
-    "Montana",
-    "Nebraska",
-    "Nevada",
-    "New Hampshire",
-    "New Jersey",
-    "New Mexico",
-    "New York",
-    "North Carolina",
-    "North Dakota",
-    "Ohio",
-    "Oklahoma",
-    "Oregon",
-    "Pennsylvania",
-    "Rhode Island",
-    "South Carolina",
-    "South Dakota",
-    "Tennessee",
-    "Texas",
-    "Utah",
-    "Vermont",
-    "Virginia",
-    "Washington",
-    "West Virginia",
-    "Wisconsin",
-    "Wyoming",
-  ];
-
-  const [form] = Form.useForm();
-
   const nav = useNavigate();
 
   const { Option } = Select;
 
   const { user } = useAuth();
 
+  const [subTotal, setSubTotal] = useState<number>(0);
+  const [shipping, setShipping] = useState<number>(0);
+  const [tax, setTax] = useState<number>(0);
+
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["checkout"],
     queryFn: () => fetchCart(user?.id),
     enabled: !!user?.id,
   });
+
   if (!user?.id) {
     return <div>Please log in to proceed with checkout.</div>;
   }
@@ -169,8 +172,6 @@ const Checkout = () => {
     return <div>Error: {error.message}</div>;
   }
 
-  console.log("Checkout data", data);
-
   const stateOptions = states?.map((s) => {
     return (
       <Option key={s} value={s}>
@@ -178,37 +179,52 @@ const Checkout = () => {
       </Option>
     );
   });
-  const orderItems = data?.map((item) => {
-    return (
-      <div key={item.id}>
-        <p>Name: {item.product?.name}</p>
-        <p>Quantity: {item.quantity}</p>
-        <p>Price: ${item.product?.price}</p>
-      </div>
-    );
-  });
-  const orderSummary = data?.map((item) => {
-    const productPrice = parseFloat(item.product?.price || "0");
-    const quantity = item.quantity || 1;
-    const subtotal = productPrice * quantity;
-    const shipping = 5.0;
-    const taxRate = 0.08;
-    const tax = subtotal * taxRate;
-    const total = subtotal + shipping + tax;
+  const orderItems = data?.map((item) => (
+    <div key={item.id}>
+      <p>
+        {item.product?.name} x {item.quantity} — $
+        {parseFloat(item.product?.price || "0").toFixed(2)}
+      </p>
+    </div>
+  ));
+
+  const orderSummary = () => {
+    const TAX_RATE = 0.08;
+    const SHIPPING_FEE = 5.0;
+
+    let subtotal = 0;
+
+    data?.forEach((item) => {
+      const price = parseFloat(item.product?.price || "0");
+      subtotal += price * item.quantity;
+    });
+
+    const tax = subtotal * TAX_RATE;
+    const shipping = subtotal > 0 ? SHIPPING_FEE : 0;
+    const total = subtotal + tax + shipping;
 
     return (
-      <div key={item.id}>
-        <p>Subtotal: ${subtotal.toFixed(2)}</p>
-        <p>Shipping: ${shipping.toFixed(2)}</p>
-        <p>Tax: ${tax.toFixed(2)}</p>
-        <p>Total: ${total.toFixed(2)}</p>
+      <div>
+        <p>
+          <strong>Subtotal:</strong> ${subtotal.toFixed(2)}
+        </p>
+        <p>
+          <strong>Shipping:</strong> ${shipping.toFixed(2)}
+        </p>
+        <p>
+          <strong>Tax:</strong> ${tax.toFixed(2)}
+        </p>
+        <p>
+          <strong>Total:</strong> ${total.toFixed(2)}
+        </p>
       </div>
     );
-  });
+  };
 
   const handleCompleteOrder = () => {
     nav("/");
   };
+
   return (
     <div
       style={{
@@ -387,7 +403,7 @@ const Checkout = () => {
           {orderItems}
 
           <hr />
-          {orderSummary}
+          {orderSummary()}
         </Card>
       </div>
     </div>

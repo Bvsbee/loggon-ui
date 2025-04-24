@@ -1,6 +1,5 @@
 import { DeleteOutlined } from "@ant-design/icons";
 import { Button, Col, InputNumber, Popconfirm, Row, Table, Tag } from "antd";
-
 import Product from "../utils/models/ProductModel";
 import { useQuery } from "@tanstack/react-query";
 import fetchCart from "../api/cart/fetchCart";
@@ -11,7 +10,6 @@ import axios from "axios";
 
 const Cart = () => {
   const handleDelete = async (id) => {
-    
     console.log("DeletedId: ", id);
 
     await axios.delete("http://localhost:3000/cart", id);
