@@ -51,7 +51,6 @@ const Home: React.FC = () => {
   const { mutate } = useMutation({ mutationFn: addToCart });
 
   const handleAddToCart = (id: string, cartQuantity: number) => {
-    //add to cart functionality
     mutate({ user, id, quantity: cartQuantity });
   };
 

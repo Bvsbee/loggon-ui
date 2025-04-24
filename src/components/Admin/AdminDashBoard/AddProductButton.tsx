@@ -89,8 +89,13 @@ const AddProductButton = ({
   };
 
   const onFinish = async (values: Product) => {
+    if (!imageUrl) {
+      // show an error or disable the submit button instead
+      return message.error("Please upload a product image first");
+    }
+
     try {
-      const result = await addProduct({ ...values, imageUrl });
+      const result = await addProduct({ ...values, image: imageUrl });
       form.resetFields();
       console.log("New product:", result);
     } catch (error: Error) {
@@ -99,9 +104,6 @@ const AddProductButton = ({
 
     refetch();
   };
-
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(false);
 
   const handleSelectChange = (value: string) => {
     const foundWood = woodOptions

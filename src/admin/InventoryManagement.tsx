@@ -20,7 +20,6 @@ import Product from "../utils/models/ProductModel";
 import {
   DeleteOutlined,
   EditOutlined,
-  PlusOutlined,
   SearchOutlined,
   InfoCircleOutlined,
 } from "@ant-design/icons";
