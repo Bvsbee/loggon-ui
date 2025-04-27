@@ -1,9 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button, Card, Col, Form, Input, Row, Select } from "antd";
 import fetchCart from "../api/cart/fetchCart";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import cartCheckout from "../api/cart/cartCheckout";
 
 const checkoutFormCardProps = {
   style: {
@@ -151,14 +152,19 @@ const Checkout = () => {
 
   const { user } = useAuth();
 
-  const [subTotal, setSubTotal] = useState<number>(0);
-  const [shipping, setShipping] = useState<number>(0);
-  const [tax, setTax] = useState<number>(0);
-
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["checkout"],
     queryFn: () => fetchCart(user?.id),
     enabled: !!user?.id,
+  });
+
+  const {
+    mutate,
+    isError: isOrderError,
+    error: orderError,
+  } = useMutation({
+    mutationKey: ["orderCheckout"],
+    mutationFn: async () => cartCheckout(user?.id),
   });
 
   if (!user?.id) {
@@ -222,6 +228,7 @@ const Checkout = () => {
   };
 
   const handleCompleteOrder = () => {
+    mutate();
     nav("/");
   };
 

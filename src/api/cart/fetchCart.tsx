@@ -1,4 +1,3 @@
-import { UserModel } from "../../utils/models/UserModel";
 import loggonAPI from "../api";
 
 const fetchCart = async (userId: string | undefined) => {
