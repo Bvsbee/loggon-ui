@@ -186,12 +186,17 @@ const Checkout = () => {
     );
   });
   const orderItems = data?.map((item) => (
-    <div key={item.id}>
-      <p>
-        {item.product?.name} x {item.quantity} — $
-        {parseFloat(item.product?.price || "0").toFixed(2)}
-      </p>
-    </div>
+      <div key={item.id} style={summaryItemStyle}>
+        <div>
+          <div style={{ fontWeight: 'bold', textAlign: 'left'}}>{item.product?.name}</div>
+          <div style={{ color: '#666', fontSize: '14px' }}>
+            Quantity: {item.quantity} × ${Number(item.product?.price).toFixed(2)}
+          </div>
+        </div>
+        <div style={{ fontWeight: 'bold' }}>
+          ${(Number(item.product?.price) * item.quantity).toFixed(2)}
+        </div>
+      </div>
   ));
 
   const orderSummary = () => {
@@ -210,19 +215,23 @@ const Checkout = () => {
     const total = subtotal + tax + shipping;
 
     return (
-      <div>
-        <p>
-          <strong>Subtotal:</strong> ${subtotal.toFixed(2)}
-        </p>
-        <p>
-          <strong>Shipping:</strong> ${shipping.toFixed(2)}
-        </p>
-        <p>
-          <strong>Tax:</strong> ${tax.toFixed(2)}
-        </p>
-        <p>
-          <strong>Total:</strong> ${total.toFixed(2)}
-        </p>
+      <div style={{ marginTop: '20px' }}>
+        <div style={summaryItemStyle}>
+          <span>Subtotal</span>
+          <span>${subtotal.toFixed(2)}</span>
+        </div>
+        <div style={summaryItemStyle}>
+          <span>Shipping</span>
+          <span>${shipping.toFixed(2)}</span>
+        </div>
+        <div style={summaryItemStyle}>
+          <span>Tax</span>
+          <span>${tax.toFixed(2)}</span>
+        </div>
+        <div style={totalRowStyle}>
+          <span>Total</span>
+          <span>${total.toFixed(2)}</span>
+        </div>
       </div>
     );
   };

@@ -83,13 +83,14 @@ const AppLayout: React.FC = () => {
               flex: 1,
               display: "flex",
               alignItems: "center",
-              justifyContent: "left",
+              justifyContent: "flex-start",
             }}
           >
             <img
               src="/logo.png"
               alt="Logo"
-              style={{ height: "125px", marginTop: "-10px" }}
+              style={{ height: "100px", marginTop: "10px", cursor: "pointer" }}
+              onClick={() => nav("/")}//go to home page on clicking logo
             />
           </div>
 

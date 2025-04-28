@@ -1,5 +1,5 @@
 import { DeleteOutlined } from "@ant-design/icons";
-import { Button, Col, InputNumber, Popconfirm, Row, Table, Tag } from "antd";
+import { Button, Col, InputNumber, message, Popconfirm, Row, Table, Tag } from "antd";
 import Product from "../utils/models/ProductModel";
 import { useQuery } from "@tanstack/react-query";
 import fetchCart from "../api/cart/fetchCart";
@@ -12,7 +12,8 @@ const Cart = () => {
   const handleDelete = async (id) => {
     console.log("DeletedId: ", id);
 
-    await axios.delete("http://localhost:3000/cart", id);
+    //await axios.delete("http://localhost:3000/cart", id);
+    await axios.delete(`http://localhost:3000/cart/${id}`);
     refetch();
   };
 
@@ -73,6 +74,11 @@ const Cart = () => {
       ),
     },
     {
+      title: "Subtotal",
+      render: (_, row: any) => 
+        `$${(Number(row.product?.price) * row.quantity).toFixed(2)}`,
+    },
+    {
       title: "",
       dataIndex: "actions",
       render: (_, row) => {
@@ -80,7 +86,7 @@ const Cart = () => {
           <>
             <Popconfirm
               title="Are you sure you want to delete this product?"
-              onConfirm={() => handleDelete(row.product?.id)}
+              onConfirm={() => handleDelete(row.id)}
               okText="Delete"
             >
               <Button
@@ -105,6 +111,7 @@ const Cart = () => {
   //   key: p.id,
   // }));
 
+  const total = data?.reduce((sum, item) => sum + (Number(item.product?.price) * item.quantity), 0) || 0;
   // console.log("cartData", cartData);
 
   return (
@@ -120,7 +127,15 @@ const Cart = () => {
         Your Shopping Cart
       </h1>
       <Table dataSource={data} columns={columns}></Table>
-      <Button onClick={handleCheckout}>Checkout</Button>
+      <div style={{ marginTop: "24px", textAlign: "center" }}>
+            <h2> Cart Total: ${total.toFixed(2)}</h2>
+            <Button
+              type="primary"
+              size="large"
+              onClick={handleCheckout}
+              style={{ marginTop: "16px" }}
+            >Checkout</Button>
+          </div>
     </div>
   );
 };

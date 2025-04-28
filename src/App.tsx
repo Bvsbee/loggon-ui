@@ -20,13 +20,14 @@ function App() {
         <Route element={<AppLayout />}>
           <Route path="/" element={<Home />}></Route>
           <Route path="/products" element={<Products />} />{" "}
+          <Route path="/cart" element={<Cart />} />
         </Route>
 
         <Route element={<AuthLayout />}>
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/cart" element={<Cart />} />
+        
         </Route>
 
         <Route element={<AdminLayout />}>
