@@ -238,7 +238,7 @@ const Checkout = () => {
 
   const handleCompleteOrder = () => {
     mutate();
-    nav("/");
+    nav("/confirmation");
   };
 
   return (

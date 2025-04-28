@@ -12,6 +12,7 @@ import Products from "./screens/Products.tsx";
 import Checkout from "./screens/Checkout.tsx";
 import Cart from "./screens/Cart.tsx";
 import InventoryManagement from "./admin/InventoryManagement.tsx";
+import OrderConfirmation from "./screens/OrderConfirmation.tsx";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/" element={<Home />}></Route>
           <Route path="/products" element={<Products />} />{" "}
           <Route path="/cart" element={<Cart />} />
+          <Route path="/confirmation" element={<OrderConfirmation />} />
         </Route>
 
         <Route element={<AuthLayout />}>
