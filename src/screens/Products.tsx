@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
+import axios from 'axios';
 import { Layout, Card, Row, Col, Select, InputNumber, Slider, Space, Typography } from 'antd';
 import { useNavigate } from 'react-router';
-import S3Image from '../components/Admin/S3ImageKey';
+import { getS3ImageUrl } from '../utils/aws/s3';
+//import S3Image from '../components/Admin/S3ImageKey';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-<S3Image imageKey = "https://loggonbucket.s3.us-east-1.amazonaws.com/purple-heart-lumber-b_234x156.jpg" />
+//<S3Image imageKey = "https://loggonbucket.s3.us-east-1.amazonaws.com/purple-heart-lumber-b_234x156.jpg" />
 
 interface Product {
   id: string;
@@ -23,20 +25,22 @@ interface Product {
   description: string;
 }
 
+//Include an array of fetched images that will be attached to each sample product 
+
 // Sample products data until we get real data
 const sampleProducts: Product[] = [
   {
     id: '1',
-    name: 'Leather Wood Carrier',
-    species: 'Oak',
+    name: 'Oh Sweet Honey',
+    species: 'Honey Locust',
     price: 125.00,
     dimensions: {
       length: 24,
       width: 16,
       height: 12
     },
-    imageUrl: 'https://www.woodworkerssource.com/mm5/graphics/woods_stacks_scans/afromosia_single.jpg',
-    description: 'amazing wood plank'
+    imageUrl: getS3ImageUrl('Honey Locust2.jpg'),
+    description: 'Stolen, original link not provided at the moment'
   },
   {
     id: '2',
@@ -107,7 +111,7 @@ const sampleProducts: Product[] = [
 
 const Products: React.FC = () => {
   const nav = useNavigate();
-  const [products] = useState<Product[]>(sampleProducts);
+  const [products, setImages] = useState<Product[]>(sampleProducts); //Including a set images function
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
   const [selectedSpecies, setSelectedSpecies] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>('price-asc');
@@ -135,6 +139,18 @@ const Products: React.FC = () => {
     });
 
   const uniqueSpecies = [...new Set(products.map(p => p.species))];
+  
+  //Retrives images 
+  /*useEffect(()=> {
+    const fetchImages = async ()  => {
+      try {const response = await axios.get<Product[]>('http://localhost:5173/products');
+      setImages(response.data);
+    } catch (error) {
+      console.error('Error fetching images:', error);
+    }
+    };
+    fetchImages();
+  }, []);*/
 
   return (
     <div style={{ padding: '24px' }}>
