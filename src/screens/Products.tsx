@@ -1,15 +1,11 @@
-import React, { useEffect,useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { Layout, Card, Row, Col, Select, InputNumber, Slider, Space, Typography } from 'antd';
 import { useNavigate } from 'react-router';
 import { getS3ImageUrl } from '../utils/aws/s3';
-//import S3Image from '../components/Admin/S3ImageKey';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
 const { Option } = Select;
-
-//<S3Image imageKey = "https://loggonbucket.s3.us-east-1.amazonaws.com/purple-heart-lumber-b_234x156.jpg" />
 
 interface Product {
   id: string;
@@ -25,8 +21,6 @@ interface Product {
   description: string;
 }
 
-//Include an array of fetched images that will be attached to each sample product 
-
 // Sample products data until we get real data
 const sampleProducts: Product[] = [
   {
@@ -39,79 +33,79 @@ const sampleProducts: Product[] = [
       width: 16,
       height: 12
     },
-    imageUrl: getS3ImageUrl('Honey Locust2.jpg'),
-    description: 'Stolen, original link not provided at the moment'
+    imageUrl: getS3ImageUrl('HoneyLocust/Honey Locust2.jpg'),
+    description: 'This is stolen'
   },
   {
     id: '2',
-    name: 'Purple Heart wood thing',
-    species: 'Oak',
+    name: "Ash Wednesday",
+    species: 'Ash',
     price: 89.00,
     dimensions: {
       length: 48,
       width: 24,
       height: 1
     },
-    imageUrl: 'https://www.woodworkerssource.com/mm5/graphics/woods_stacks_scans/main_lumber/purple-heart-lumber-b.jpg',
-    description: 'these are stolen pictures dont sue me'
+    imageUrl: getS3ImageUrl('Ash/Ash Wood.webp'),
+    description: 'Also stolen'
   },
   {
     id: '3',
-    name: 'Birch Hardwood',
-    species: 'Birch',
+    name: "It's red",
+    species: 'Aromatic Red Cedar',
     price: 65.00,
     dimensions: {
       length: 16,
       width: 16,
       height: 16
     },
-    imageUrl: 'https://www.woodworkerssource.com/mm5/graphics/samples/birch-sample_1000x652.jpg',
-    description: 'Bundle of premium birch logs'
+    imageUrl: getS3ImageUrl('AromaticRedCedar/Red Cedar.jpg'),
+    description: 'Premium would, with a stolen image'
   },
   {
     id: '4',
-    name: 'Pine wood thing',
-    species: 'Pine',
+    name: 'The king of wood',
+    species: 'Kingwood',
     price: 149.99,
     dimensions: {
       length: 36,
       width: 24,
       height: 30
     },
-    imageUrl: 'https://www.woodworkerssource.com/mm5/graphics/woods_stacks_scans/main_lumber/poplar-lumber.jpg',
-    description: 'Rustic trolley for wood storage and transport'
+    imageUrl: getS3ImageUrl('Kingwood/Kingwood.jpg'),
+    description: 'Royalty is always stolen, just like this image'
   },
   {
     id: '5',
-    name: 'idk what its called. but looks good',
-    species: 'Maple',
+    name: 'Type of wood',
+    species: 'Black Limba',
     price: 78.50,
     dimensions: {
       length: 12,
       width: 8,
       height: 2
     },
-    imageUrl: 'https://www.bellforestproducts.com/_includes/product-photos/43107.jpg',
-    description: 'Decorative wooden book stack'
+    imageUrl: getS3ImageUrl('BlackLimba/Black Limba2.jpg'),
+    description: 'Fancy names are usually stolen'
   },
   {
     id: '6',
-    name: 'pile of wood ',
-    species: 'Cedar',
+    name: 'Mangos grow on trees',
+    species: 'Figured Mango',
     price: 95.00,
     dimensions: {
       length: 18,
       width: 18,
       height: 2
     },
-    imageUrl: 'https://www.woodworkerssource.com/mm5/graphics/woods_stacks_scans/Walnut/S4S/thin/Walnut_pre-cut_thin_2_4_1000x667.jpg',
-    description: 'Natural wood slice wall clock'
+    imageUrl: getS3ImageUrl('FiguredMango/Figured Mango2.jpg'),
+    description: 'Stolen'
   }
 ];
 
 const Products: React.FC = () => {
   const nav = useNavigate();
-  const [products, setImages] = useState<Product[]>(sampleProducts); //Including a set images function
+  const [products] = useState<Product[]>(sampleProducts);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
   const [selectedSpecies, setSelectedSpecies] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>('price-asc');
@@ -139,18 +133,6 @@ const Products: React.FC = () => {
     });
 
   const uniqueSpecies = [...new Set(products.map(p => p.species))];
-  
-  //Retrives images 
-  /*useEffect(()=> {
-    const fetchImages = async ()  => {
-      try {const response = await axios.get<Product[]>('http://localhost:5173/products');
-      setImages(response.data);
-    } catch (error) {
-      console.error('Error fetching images:', error);
-    }
-    };
-    fetchImages();
-  }, []);*/
 
   return (
     <div style={{ padding: '24px' }}>
