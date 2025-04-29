@@ -13,6 +13,7 @@ import {
   Tag,
   Tooltip,
   InputNumber,
+  Select,
 } from "antd";
 import { useState } from "react";
 import { useFetchProducts } from "../api/fetch/useFetchProducts";
@@ -52,20 +53,14 @@ const InventoryManagement = () => {
 
   const handleDelete = async (row: Product) => {
     try {
+      console.log(row.id);
       setLoading(true);
-      const response = await loggonAPI.delete(`product/${row.id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          method: "DELETE",
-        },
-        params: {
-          id: row.id,
-        },
-      });
+      const response = await loggonAPI.delete(`product/${row.id}`);
       await refetch();
       return response;
     } catch (error) {
       console.error("Error deleting product: ", error);
+      console.error("Server response:", error.response?.data);
     } finally {
       setLoading(false);
     }
@@ -116,6 +111,17 @@ const InventoryManagement = () => {
         value.toString().toLowerCase().includes(searchText.toLowerCase())
     );
   });
+
+  const dimensionOptions = [
+    { label: "2x4", value: "2x4" },
+    { label: "2x6", value: "2x6" },
+    { label: "4x4", value: "4x4" },
+    { label: "4x8", value: "4x8" },
+    { label: "6x6", value: "6x6" },
+    { label: "8x10", value: "8x10" },
+    { label: "10x12", value: "10x12" },
+    { label: "12x12", value: "12x12" },
+  ];
 
   const columns = [
     {
@@ -290,7 +296,7 @@ const InventoryManagement = () => {
             </Col>
           </Row>
           <Item name="dimensions" label="Dimensions">
-            <Input />
+            <Select options={dimensionOptions}></Select>
           </Item>
           <Item name="description" label="Description">
             <Input.TextArea rows={4} />

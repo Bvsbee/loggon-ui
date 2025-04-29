@@ -196,7 +196,7 @@ const AddProductButton = ({
                 rules={[
                   {
                     required: true,
-                    message: "Please input a Quantity!",
+                    message: "Please select a Dimension",
                   },
                 ]}
               >

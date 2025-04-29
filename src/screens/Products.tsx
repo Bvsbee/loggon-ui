@@ -138,6 +138,8 @@ const Products: React.FC = () => {
     );
   }
 
+  console.log({ productData });
+
   return (
     <div style={{ padding: "24px" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>

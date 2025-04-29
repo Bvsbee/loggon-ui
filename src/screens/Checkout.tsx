@@ -158,11 +158,7 @@ const Checkout = () => {
     enabled: !!user?.id,
   });
 
-  const {
-    mutate,
-    isError: isOrderError,
-    error: orderError,
-  } = useMutation({
+  const { mutate } = useMutation({
     mutationKey: ["orderCheckout"],
     mutationFn: async () => cartCheckout(user?.id),
   });
@@ -186,17 +182,19 @@ const Checkout = () => {
     );
   });
   const orderItems = data?.map((item) => (
-      <div key={item.id} style={summaryItemStyle}>
-        <div>
-          <div style={{ fontWeight: 'bold', textAlign: 'left'}}>{item.product?.name}</div>
-          <div style={{ color: '#666', fontSize: '14px' }}>
-            Quantity: {item.quantity} × ${Number(item.product?.price).toFixed(2)}
-          </div>
+    <div key={item.id} style={summaryItemStyle}>
+      <div>
+        <div style={{ fontWeight: "bold", textAlign: "left" }}>
+          {item.product?.name}
         </div>
-        <div style={{ fontWeight: 'bold' }}>
-          ${(Number(item.product?.price) * item.quantity).toFixed(2)}
+        <div style={{ color: "#666", fontSize: "14px" }}>
+          Quantity: {item.quantity} × ${Number(item.product?.price).toFixed(2)}
         </div>
       </div>
+      <div style={{ fontWeight: "bold" }}>
+        ${(Number(item.product?.price) * item.quantity).toFixed(2)}
+      </div>
+    </div>
   ));
 
   const orderSummary = () => {
@@ -215,7 +213,7 @@ const Checkout = () => {
     const total = subtotal + tax + shipping;
 
     return (
-      <div style={{ marginTop: '20px' }}>
+      <div style={{ marginTop: "20px" }}>
         <div style={summaryItemStyle}>
           <span>Subtotal</span>
           <span>${subtotal.toFixed(2)}</span>

@@ -1,6 +1,6 @@
 import loggonAPI from "../api";
 
-const cartCheckout = async (userId: string) => {
+const cartCheckout = async (userId: string | undefined) => {
   try {
     const res = await loggonAPI.post(`/cart/orderComplete?userId=${userId}`);
 
