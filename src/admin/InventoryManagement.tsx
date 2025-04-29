@@ -54,10 +54,6 @@ const InventoryManagement = () => {
     try {
       setLoading(true);
       const response = await loggonAPI.delete(`product/${row.id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          method: "DELETE",
-        },
         params: {
           id: row.id,
         },
