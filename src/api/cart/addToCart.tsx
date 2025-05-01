@@ -12,8 +12,15 @@ const addToCart = async ({
 }) => {
   try {
     console.log("ProductID: ", id);
+    console.log("User id", user?.id);
+
+    if (!user?.id) {
+      return "Need a user";
+    }
+
+    const userId: string = user?.id;
     const response = await loggonAPI.post("/cart", {
-      userId: user?.id,
+      userId: userId,
       productId: id,
       quantity: quantity,
     });
