@@ -1,4 +1,4 @@
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import styles from "../../styles/AuthLayout.module.css";
 import { Avatar, Dropdown, Layout, Menu, MenuProps } from "antd";
 import {
@@ -19,6 +19,8 @@ const AdminLayout = () => {
   const { logout } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
 
+  const nav = useNavigate();
+
   // Profile dropdown menu items
   const profileItems: MenuProps["items"] = [
     {
@@ -30,6 +32,7 @@ const AdminLayout = () => {
       key: "2",
       onClick: () => {
         logout();
+        nav("/");
       },
     },
   ];
@@ -73,8 +76,11 @@ const AdminLayout = () => {
             fontSize: "18px",
           }}
         >
-          {!collapsed && "LoggOn Admin"}
-          {collapsed && "LO"}
+          <img
+            src={collapsed ? "/logo.png" : "/logo.png"}
+            style={{ height: "40px", cursor: "pointer" }}
+            onClick={() => nav("/")} // optional: navigate on click
+          />
         </div>
         <Menu
           theme="light"
@@ -110,7 +116,6 @@ const AdminLayout = () => {
                 },
               }
             )}
-            <span style={{ fontSize: "18px", fontWeight: "bold" }}>LoggOn</span>
           </div>
           <Dropdown menu={{ items: profileItems }} placement="bottomRight">
             <div

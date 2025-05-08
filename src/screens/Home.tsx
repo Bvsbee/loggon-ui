@@ -68,32 +68,59 @@ const Home: React.FC = () => {
         width: "100%",
       }}
     >
+      ;
       <div
         style={{
-          //background: '#f5f5f5',
-          padding: "48px 24px",
+          backgroundImage: "url('/path-to-your-image.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          padding: "80px 24px",
           textAlign: "center",
-          marginBottom: "48px",
-          borderRadius: "8px",
+          marginBottom: "64px",
+          borderRadius: "12px",
+          boxShadow: "0 6px 20px rgba(0,0,0,0.05)",
+          position: "relative",
+          zIndex: 1,
+          border: "1px solid #000",
         }}
       >
-        <Title level={1}>Welcome to Loggon</Title>
+        <Title
+          level={1}
+          style={{ fontSize: "3rem", color: "#1a3c2f", marginBottom: "16px" }}
+        >
+          Welcome to Loggon
+        </Title>
+
         <Paragraph
-          style={{ fontSize: "18px", maxWidth: "600px", margin: "0 auto" }}
+          style={{
+            fontSize: "18px",
+            color: "#3f3f3f",
+            maxWidth: "640px",
+            margin: "0 auto 32px",
+            lineHeight: 1.6,
+          }}
         >
           Loggon is your trusted source for high-quality exotic wood species. We
           provide premium selections with fast shipping and excellent service.
         </Paragraph>
+
         <Button
           type="primary"
           size="large"
           onClick={() => nav("/products")}
-          style={{ marginTop: "24px" }}
+          style={{
+            background: "linear-gradient(90deg, #c76b1d, #b35704)",
+            border: "none",
+            borderRadius: "8px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+            padding: "0 32px",
+            height: "48px",
+            fontSize: "16px",
+          }}
         >
           Shop Now
         </Button>
       </div>
-
       {/* featured products section*/}
       <div style={{ marginBottom: "48px" }}>
         <Title level={2} style={{ textAlign: "center", marginBottom: "32px" }}>
@@ -124,6 +151,12 @@ const Home: React.FC = () => {
               <Col xs={24} sm={12} md={8} key={product.id}>
                 <Card
                   hoverable
+                  style={{
+                    borderRadius: "12px",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
+                    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                    padding: "8px",
+                  }}
                   cover={
                     <img
                       alt={product.name}
@@ -137,15 +170,29 @@ const Home: React.FC = () => {
                     />
                   }
                   onClick={() => handleProductClick(product)}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.boxShadow =
+                      "0 6px 20px rgba(0,0,0,0.1)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.boxShadow =
+                      "0 4px 12px rgba(0, 0, 0, 0.05)")
+                  }
                 >
                   <Card.Meta
-                    title={product.name}
+                    title={
+                      <strong style={{ fontSize: "16px" }}>
+                        {product.name}
+                      </strong>
+                    }
                     description={
                       <Space direction="vertical">
                         <Text strong>${Number(product.price).toFixed(2)}</Text>
                         <Text type="secondary">{product.species}</Text>
-                        {product.quantity > 5 && (
-                          <Text type="success">In Stock</Text>
+                        {product.quantity > 0 ? (
+                          <span style={{ color: "green" }}>In Stock</span>
+                        ) : (
+                          <span style={{ color: "red" }}>Out of Stock</span>
                         )}
                         {product.quantity <= 5 && product.quantity > 0 && (
                           <Text type="warning">
@@ -164,7 +211,6 @@ const Home: React.FC = () => {
           </Row>
         )}
       </div>
-
       <ProductModal
         product={selectedProduct}
         visible={isModalVisible}

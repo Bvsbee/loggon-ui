@@ -8,6 +8,8 @@ import {
   Button,
   MenuProps,
   Badge,
+  Row,
+  Col,
 } from "antd";
 import { UserOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { useAuth } from "../../context/AuthContext";
@@ -32,6 +34,25 @@ const AppLayout: React.FC = () => {
     enabled: !!user?.id,
   });
 
+  const products = [
+    {
+      label: "Hardwood",
+      options: [
+        { label: "Oak", value: "Oak", category: "Hardwood" },
+        { label: "Maple", value: "Maple", category: "Hardwood" },
+        { label: "Walnut", value: "Walnut", category: "Hardwood" },
+      ],
+    },
+    {
+      label: "Softwood",
+      options: [
+        { label: "Pine", value: "Pine", category: "Softwood" },
+        { label: "Cedar", value: "Cedar", category: "Softwood" },
+        { label: "Fir", value: "Fir", category: "Softwood" },
+      ],
+    },
+  ];
+
   console.log("Cart", data?.items?.lengths);
   const items: MenuProps["items"] = [
     ...(user?.isAdmin
@@ -47,6 +68,7 @@ const AppLayout: React.FC = () => {
       key: "2",
       onClick: () => {
         logout();
+        nav("/");
       },
     },
   ];
@@ -90,7 +112,7 @@ const AppLayout: React.FC = () => {
               src="/logo.png"
               alt="Logo"
               style={{ height: "100px", marginTop: "10px", cursor: "pointer" }}
-              onClick={() => nav("/")}//go to home page on clicking logo
+              onClick={() => nav("/")} //go to home page on clicking logo
             />
           </div>
 
@@ -119,11 +141,7 @@ const AppLayout: React.FC = () => {
               gap: "20px",
             }}
           >
-            <Badge
-              count={data?.items?.length || 0}
-              size="small"
-              offset={[-2, 2]}
-            >
+            <Badge count={data?.length || 0} size="small" offset={[-2, 2]}>
               <ShoppingCartOutlined
                 onClick={() => nav("/cart")}
                 style={{ fontSize: "24px", cursor: "pointer" }}
@@ -166,18 +184,59 @@ const AppLayout: React.FC = () => {
           </Menu>
         </div>
       </Header>
-
       <Content>
         <Outlet />
       </Content>
 
       <Footer
         style={{
+          backgroundColor: "#606c37",
+          color: "white",
           textAlign: "center",
-          padding: "50px",
+          padding: "50px 0",
         }}
       >
-        © {new Date().getFullYear()} LoggOn. All rights reserved.
+        <Row justify="space-around" align="top">
+          <Col span={6}>
+            <h3 style={{ color: "white" }}>Contact Us</h3>
+            <ul style={{ color: "white" }}>
+              <li>Email: LoggonSupport@example.com</li>
+              <li>Phone: 123-456-7890</li>
+            </ul>
+          </Col>
+          <Col span={6}>
+            <h3 style={{ color: "white" }}>Products</h3>
+            <ul style={{ color: "white" }}>
+              <h4 style={{ color: "white" }}>Hardwood</h4>
+              <li>Oak</li>
+              <li>Maple</li>
+              <li>Walnut</li>
+
+              <h4 style={{ color: "white" }}>Softwood</h4>
+              <li>Pine</li>
+              <li>Cedar</li>
+              <li>Fir</li>
+            </ul>
+          </Col>
+          <Col span={6}>
+            <h3 style={{ color: "white" }}>About Us</h3>
+            <ul style={{ color: "white" }}>
+              <li>
+                <a href="/about" style={{ color: "white" }}>
+                  Our Story
+                </a>
+              </li>
+              <li>
+                <a href="/team" style={{ color: "white" }}>
+                  Our Team
+                </a>
+              </li>
+            </ul>
+          </Col>
+        </Row>
+        <div style={{ textAlign: "center", marginTop: "30px", color: "white" }}>
+          © {new Date().getFullYear()} LoggOn. All rights reserved.
+        </div>
       </Footer>
     </Layout>
   );

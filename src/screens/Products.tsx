@@ -251,6 +251,12 @@ const Products: React.FC = () => {
                 <Col xs={24} sm={12} md={8} lg={6} key={product.id}>
                   <Card
                     hoverable
+                    style={{
+                      borderRadius: "12px",
+                      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
+                      transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                      padding: "8px",
+                    }}
                     cover={
                       <img
                         alt={product.name}
@@ -259,9 +265,21 @@ const Products: React.FC = () => {
                       />
                     }
                     onClick={() => handleProductClick(product)}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.boxShadow =
+                        "0 6px 20px rgba(0,0,0,0.1)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.boxShadow =
+                        "0 4px 12px rgba(0, 0, 0, 0.05)")
+                    }
                   >
                     <Card.Meta
-                      title={product.name}
+                      title={
+                        <strong style={{ fontSize: "16px" }}>
+                          {product.name}
+                        </strong>
+                      }
                       description={
                         <Space direction="vertical" size={0}>
                           <Text strong>
