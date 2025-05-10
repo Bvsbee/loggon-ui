@@ -26,3 +26,16 @@ npm install
 
 # Start the development server
 npm run dev
+
+# Technologies Used 🛠️
+React
+
+Vite
+
+TypeScript
+
+React Router
+
+Axios
+
+React Query
