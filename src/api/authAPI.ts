@@ -1,6 +1,6 @@
 import loggonAPI from "./api";
 
-export const registerUser = async (credentials: {
+export const loginUser = async (credentials: {
   email: string;
   password: string;
 }) => {

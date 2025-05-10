@@ -1,5 +1,5 @@
 import axios from "axios";
-import Product from "../../classses/Product";
+import Product from "../../utils/models/ProductModel";
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL;
 

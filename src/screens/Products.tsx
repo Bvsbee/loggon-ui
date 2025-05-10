@@ -1,9 +1,26 @@
-import React, { useState } from 'react';
-import { Layout, Card, Row, Col, Select, InputNumber, Slider, Space, Typography } from 'antd';
-import { useNavigate } from 'react-router';
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  Row,
+  Col,
+  Select,
+  InputNumber,
+  Slider,
+  Space,
+  Typography,
+  Spin,
+  Alert,
+} from "antd";
+import { useNavigate, useSearchParams } from "react-router";
+import { useFetchProducts } from "../api/fetch/useFetchProducts";
+//import { ShoppingCartOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import ProductModal from "../components/ProductModal";
+import { useMutation } from "@tanstack/react-query";
+import addToCart from "../api/cart/addToCart";
+import { useAuth } from "../context/AuthContext";
 
-const { Content } = Layout;
-const { Title, Text } = Typography;
+//const { Content } = Layout;
+const { Title, Text, Paragraph } = Typography;
 const { Option } = Select;
 
 interface Product {
@@ -11,168 +28,178 @@ interface Product {
   name: string;
   species: string;
   price: number;
-  dimensions: {
-    length: number;
-    width: number;
-    height: number;
-  };
-  imageUrl: string;
+  dimensions: string;
+  image: string;
   description: string;
+  quantity: number;
 }
-
-// Sample products data until we get real data
-const sampleProducts: Product[] = [
-  {
-    id: '1',
-    name: 'Leather Wood Carrier',
-    species: 'Oak',
-    price: 125.00,
-    dimensions: {
-      length: 24,
-      width: 16,
-      height: 12
-    },
-    imageUrl: 'https://www.woodworkerssource.com/mm5/graphics/woods_stacks_scans/afromosia_single.jpg',
-    description: 'amazing wood plank'
-  },
-  {
-    id: '2',
-    name: 'Purple Heart wood thing',
-    species: 'Oak',
-    price: 89.00,
-    dimensions: {
-      length: 48,
-      width: 24,
-      height: 1
-    },
-    imageUrl: 'https://www.woodworkerssource.com/mm5/graphics/woods_stacks_scans/main_lumber/purple-heart-lumber-b.jpg',
-    description: 'these are stolen pictures dont sue me'
-  },
-  {
-    id: '3',
-    name: 'Birch Hardwood',
-    species: 'Birch',
-    price: 65.00,
-    dimensions: {
-      length: 16,
-      width: 16,
-      height: 16
-    },
-    imageUrl: 'https://www.woodworkerssource.com/mm5/graphics/samples/birch-sample_1000x652.jpg',
-    description: 'Bundle of premium birch logs'
-  },
-  {
-    id: '4',
-    name: 'Pine wood thing',
-    species: 'Pine',
-    price: 149.99,
-    dimensions: {
-      length: 36,
-      width: 24,
-      height: 30
-    },
-    imageUrl: 'https://www.woodworkerssource.com/mm5/graphics/woods_stacks_scans/main_lumber/poplar-lumber.jpg',
-    description: 'Rustic trolley for wood storage and transport'
-  },
-  {
-    id: '5',
-    name: 'idk what its called. but looks good',
-    species: 'Maple',
-    price: 78.50,
-    dimensions: {
-      length: 12,
-      width: 8,
-      height: 2
-    },
-    imageUrl: 'https://www.bellforestproducts.com/_includes/product-photos/43107.jpg',
-    description: 'Decorative wooden book stack'
-  },
-  {
-    id: '6',
-    name: 'pile of wood ',
-    species: 'Cedar',
-    price: 95.00,
-    dimensions: {
-      length: 18,
-      width: 18,
-      height: 2
-    },
-    imageUrl: 'https://www.woodworkerssource.com/mm5/graphics/woods_stacks_scans/Walnut/S4S/thin/Walnut_pre-cut_thin_2_4_1000x667.jpg',
-    description: 'Natural wood slice wall clock'
-  }
-];
 
 const Products: React.FC = () => {
   const nav = useNavigate();
-  const [products] = useState<Product[]>(sampleProducts);
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
+  const { data: productData, isLoading, error } = useFetchProducts();
+  const [products, setProducts] = useState<Product[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
   const [selectedSpecies, setSelectedSpecies] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState<string>('price-asc');
+  const [sortBy, setSortBy] = useState<string>("price-asc");
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [cartQuantity, setCartQuantity] = useState(1);
+
+  useEffect(() => {
+    if (productData) {
+      let filteredProducts = [...productData];
+
+      // search filter
+      if (searchQuery) {
+        filteredProducts = filteredProducts.filter((product) =>
+          product.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+
+      setProducts(filteredProducts);
+    }
+  }, [productData, searchQuery]);
+
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product);
+    setCartQuantity(1); //set quantity to 1
+    setIsModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+    setCartQuantity(1);
+  };
+
+  const { mutate } = useMutation({ mutationFn: addToCart });
+
+  const { user } = useAuth();
+
+  const handleAddToCart = (id: string, cartQuantity: number) => {
+    //implement add to cart functionality here
+    console.log("Adding to cart:", id, "Quantity:", cartQuantity);
+
+    mutate({ user, id, quantity: cartQuantity });
+  };
 
   const filteredProducts = products
-    .filter(product => 
-      product.price >= priceRange[0] &&
-      product.price <= priceRange[1] &&
-      (selectedSpecies.length === 0 || selectedSpecies.includes(product.species))
+    .filter(
+      (product) =>
+        Number(product.price) >= priceRange[0] &&
+        Number(product.price) <= priceRange[1] &&
+        (selectedSpecies.length === 0 ||
+          selectedSpecies.includes(product.species))
     )
     .sort((a, b) => {
       switch (sortBy) {
-        case 'price-asc':
-          return a.price - b.price;
-        case 'price-desc':
-          return b.price - a.price;
-        case 'name-asc':
+        case "price-asc":
+          return Number(a.price) - Number(b.price);
+        case "price-desc":
+          return Number(b.price) - Number(a.price);
+        case "name-asc":
           return a.name.localeCompare(b.name);
-        case 'name-desc':
+        case "name-desc":
           return b.name.localeCompare(a.name);
         default:
           return 0;
       }
     });
 
-  const uniqueSpecies = [...new Set(products.map(p => p.species))];
+  const uniqueSpecies = [...new Set(products.map((p) => p.species))];
+
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "60vh",
+        }}
+      >
+        <Spin size="large" tip="Loading products..." />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ padding: "24px" }}>
+        <Alert
+          message="Error loading products"
+          description="We couldn't load the products. Please try again later."
+          type="error"
+          showIcon
+        />
+      </div>
+    );
+  }
+
+  console.log({ productData });
 
   return (
-    <div style={{ padding: '24px' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <Space direction="vertical" size="large" style={{ width: '100%' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+    <div style={{ padding: "24px" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <Space direction="vertical" size="large" style={{ width: "100%" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 16,
+            }}
+          >
             <Title level={2}>Wood Species</Title>
             <Space>
               <Text>{filteredProducts.length} products</Text>
-              <a onClick={() => setShowFilters(!showFilters)} style={{ marginLeft: 16 }}>
-                {showFilters ? 'Hide Filters' : 'Show Filters'}
+              <a
+                onClick={() => setShowFilters(!showFilters)}
+                style={{ marginLeft: 16 }}
+              >
+                {showFilters ? "Hide Filters" : "Show Filters"}
               </a>
             </Space>
           </div>
 
           {showFilters && (
             <Card style={{ marginBottom: 24 }}>
-              <Space direction="vertical" size="large" style={{ width: '100%' }}>
+              <Space
+                direction="vertical"
+                size="large"
+                style={{ width: "100%" }}
+              >
                 <div>
                   <Text strong>Price Range</Text>
                   <Slider
                     range
                     min={0}
-                    max={200}
+                    max={priceRange[1] > 200 ? priceRange[1] : 200}
                     value={priceRange}
-                    onChange={(value: number[]) => setPriceRange(value as [number, number])}
-                    style={{ width: '100%' }}
+                    onChange={(value: number[]) =>
+                      setPriceRange(value as [number, number])
+                    }
+                    style={{ width: "100%" }}
                   />
                   <Space>
                     <InputNumber
                       min={0}
-                      max={200}
+                      max={priceRange[1]}
                       value={priceRange[0]}
-                      onChange={value => setPriceRange([value || 0, priceRange[1]])}
+                      onChange={(value) =>
+                        setPriceRange([value || 0, priceRange[1]])
+                      }
                     />
                     <Text>to</Text>
                     <InputNumber
-                      min={0}
-                      max={200}
+                      min={priceRange[0]}
+                      max={priceRange[1] * 2}
                       value={priceRange[1]}
-                      onChange={value => setPriceRange([priceRange[0], value || 200])}
+                      onChange={(value) =>
+                        setPriceRange([priceRange[0], value || priceRange[1]])
+                      }
                     />
                   </Space>
                 </div>
@@ -181,13 +208,15 @@ const Products: React.FC = () => {
                   <Text strong>Species</Text>
                   <Select
                     mode="multiple"
-                    style={{ width: '100%' }}
+                    style={{ width: "100%" }}
                     placeholder="Select wood species"
                     value={selectedSpecies}
                     onChange={setSelectedSpecies}
                   >
-                    {uniqueSpecies.map(species => (
-                      <Option key={species} value={species}>{species}</Option>
+                    {uniqueSpecies.map((species) => (
+                      <Option key={species} value={species}>
+                        {species}
+                      </Option>
                     ))}
                   </Select>
                 </div>
@@ -209,40 +238,82 @@ const Products: React.FC = () => {
             </Card>
           )}
 
-          <Row gutter={[24, 24]}>
-            {filteredProducts.map(product => (
-              <Col xs={24} sm={12} md={8} lg={6} key={product.id}>
-                <Card
-                  hoverable
-                  cover={
-                    <img
-                      alt={product.name}
-                      src={product.imageUrl}
-                      style={{ height: 200, objectFit: 'cover' }}
-                    />
-                  }
-                  onClick={() => nav(`/product/${product.id}`)}
-                >
-                  <Card.Meta
-                    title={product.name}
-                    description={
-                      <Space direction="vertical" size={0}>
-                        <Text strong>${product.price.toFixed(2)}</Text>
-                        <Text type="secondary">{product.species}</Text>
-                        <Text type="secondary">
-                          {`${product.dimensions.length}"L x ${product.dimensions.width}"W x ${product.dimensions.height}"H`}
-                        </Text>
-                      </Space>
+          {filteredProducts.length === 0 && !isLoading ? (
+            <Alert
+              message="No products found"
+              description="Try adjusting your filters to see more products."
+              type="info"
+              showIcon
+            />
+          ) : (
+            <Row gutter={[24, 24]}>
+              {filteredProducts.map((product) => (
+                <Col xs={24} sm={12} md={8} lg={6} key={product.id}>
+                  <Card
+                    hoverable
+                    style={{
+                      borderRadius: "12px",
+                      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
+                      transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                      padding: "8px",
+                    }}
+                    cover={
+                      <img
+                        alt={product.name}
+                        src={product.image}
+                        style={{ height: 200, objectFit: "cover" }}
+                      />
                     }
-                  />
-                </Card>
-              </Col>
-            ))}
-          </Row>
+                    onClick={() => handleProductClick(product)}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.boxShadow =
+                        "0 6px 20px rgba(0,0,0,0.1)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.boxShadow =
+                        "0 4px 12px rgba(0, 0, 0, 0.05)")
+                    }
+                  >
+                    <Card.Meta
+                      title={
+                        <strong style={{ fontSize: "16px" }}>
+                          {product.name}
+                        </strong>
+                      }
+                      description={
+                        <Space direction="vertical" size={0}>
+                          <Text strong>
+                            ${Number(product.price).toFixed(2)}
+                          </Text>
+                          <Text type="secondary">{product.species}</Text>
+                          <Text type="secondary">{product.dimensions}</Text>
+                          {product.quantity <= 5 && product.quantity > 0 && (
+                            <Text type="warning">
+                              Only {product.quantity} left!
+                            </Text>
+                          )}
+                          {product.quantity === 0 && (
+                            <Text type="danger">Out of stock</Text>
+                          )}
+                        </Space>
+                      }
+                    />
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          )}
         </Space>
       </div>
+
+      <ProductModal
+        product={selectedProduct}
+        visible={isModalVisible}
+        onClose={handleModalClose}
+        onAddToCart={handleAddToCart}
+      />
     </div>
   );
 };
 
-export default Products; 
+export default Products;

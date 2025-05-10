@@ -1,66 +1,21 @@
-import { Table } from "antd";
-import AddProductButton from "../components/Admin/AdminDashBoard/AddProductButton";
-import { useEffect, useState } from "react";
-import { getProducts } from "../api/fetch/useFetchProducts";
-import Product from "../classses/Product";
-import { data } from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "../context/AuthContext";
+import fetchAdminDashboard from "../api/admin/fetchAdminDashBoard";
+import SalesChart from "../components/SalesChart";
 
 const AdminDashboard = () => {
-  const [visible, setVisible] = useState<boolean>(false);
+  const { user } = useAuth();
 
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const { data, isLoading, error, isError } = useQuery({
+    queryKey: ["adminDashboard"],
+    queryFn: () => fetchAdminDashboard(user?.id),
+  });
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const data = await getProducts();
-        setProducts(data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, [products]);
-
-  const columns = [
-    {
-      title: "Name",
-      dataIndex: "name",
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-    },
-    {
-      title: "Category",
-      dataIndex: "category",
-    },
-    {
-      title: "Quantity",
-      dataIndex: "quantity",
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-    },
-  ];
-
-  const handleModalVisibility = () => setVisible(!visible);
+  console.log(data);
 
   return (
     <div>
-      <AddProductButton
-        handleModalVisibility={handleModalVisibility}
-        visible={visible}
-      />
-      <div>
-        <Table columns={columns} dataSource={products}></Table>
-      </div>
+      <SalesChart />
     </div>
   );
 };
